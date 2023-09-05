@@ -4,6 +4,7 @@ import {
   ActivityIndicator,
   StatusBar,
   StyleSheet,
+  Text,
   useContext,
 } from "react-native";
 import AnimatedLottieView from "lottie-react-native";
@@ -54,5 +55,18 @@ export const Animation = ({
       onAnimationFinish={onAnimationFinish}
       ref={lottieRef}
     />
+  );
+};
+
+export const RouteCard = () => {
+  return (
+    <View
+      style={{
+        backgroundColor: "red",
+        heigh: 500,
+      }}
+    >
+      <Text>RouteCard</Text>
+    </View>
   );
 };

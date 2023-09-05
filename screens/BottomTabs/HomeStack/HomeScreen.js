@@ -5,15 +5,108 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS } from "../../../constants/colors";
 import SearchBar from "../../../components/SearchBar";
 
+function RouterCard() {
+  return (
+    <View
+      style={{
+        width: "100%",
+        flexDirection: "row",
+        aliginItems: "center",
+      }}
+    >
+      <View
+        style={{
+          width: "60%",
+          backgroundColor: COLORS.light,
+          height: 170,
+          borderRadius: 15,
+          borderRightWidth: 2,
+          borderRightColor: COLORS.background,
+          // borderStyle: "dashed",
+          // borderRightColor: "grey",
+        }}
+      >
+        <View
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            backgroundColor: COLORS.background,
+            height: 10,
+            width: 10,
+            borderBottomLeftRadius: 6,
+          }}
+        ></View>
+        <View
+          style={{
+            position: "absolute",
+            bottom: 0,
+            right: 0,
+            backgroundColor: COLORS.background,
+            height: 10,
+            width: 10,
+            borderTopLeftRadius: 6,
+          }}
+        ></View>
+      </View>
+      <View
+        style={{
+          width: "40%",
+          height: 170,
+          backgroundColor: COLORS.light,
+          borderRadius: 15,
+        }}
+      >
+        <View
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            backgroundColor: COLORS.background,
+            height: 10,
+            width: 10,
+            borderBottomRightRadius: 6,
+          }}
+        ></View>
+        <View
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            backgroundColor: COLORS.background,
+            height: 10,
+            width: 10,
+            borderTopRightRadius: 6,
+          }}
+        ></View>
+      </View>
+    </View>
+  );
+}
+
 function HomeScreen() {
   return (
     <>
       <StatusBar style="dark" />
-      <SafeAreaView style={styles.container}>
-        <View style={styles.innerContainer}>
-          <SearchBar searchQueryHandler={() => console.log("im here")} />
-        </View>
-      </SafeAreaView>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: COLORS.background,
+        }}
+      >
+        <SafeAreaView style={styles.container}>
+          <View style={styles.innerContainer}>
+            <SearchBar searchQueryHandler={() => console.log("im here")} />
+            <View
+              style={{
+                marginVertical: 15,
+              }}
+            >
+              <RouterCard />
+            </View>
+          </View>
+        </SafeAreaView>
+      </View>
     </>
   );
 }
@@ -26,7 +119,6 @@ const styles = StyleSheet.create({
     width: "96%",
     marginLeft: "auto",
     marginRight: "auto",
-    marginTop: 30,
   },
   innerContainer: {
     flex: 1,
