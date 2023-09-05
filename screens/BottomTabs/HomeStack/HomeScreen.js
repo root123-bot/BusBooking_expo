@@ -22,8 +22,14 @@ function RouterCard() {
           borderRadius: 15,
           borderRightWidth: 2,
           borderRightColor: COLORS.background,
-          // borderStyle: "dashed",
-          // borderRightColor: "grey",
+          shadowColor: "#DEE2E6",
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          elevation: 5,
+          shadowOpacity: 0.5,
+          shadowRadius: 3.84,
         }}
       >
         <View
@@ -55,6 +61,14 @@ function RouterCard() {
           height: 170,
           backgroundColor: COLORS.light,
           borderRadius: 15,
+          shadowColor: "#DEE2E6",
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          elevation: 5,
+          shadowOpacity: 0.5,
+          shadowRadius: 3.84,
         }}
       >
         <View
