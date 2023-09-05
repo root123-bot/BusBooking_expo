@@ -1,6 +1,15 @@
 import React, { useRef, useEffect } from "react";
-import { View, ActivityIndicator, StatusBar, StyleSheet } from "react-native";
+import {
+  View,
+  ActivityIndicator,
+  StatusBar,
+  StyleSheet,
+  useContext,
+} from "react-native";
 import AnimatedLottieView from "lottie-react-native";
+import { Searchbar } from "react-native-paper";
+import { COLORS } from "../constants/colors";
+import { AppContext } from "../store/context";
 
 export const LoadingSpinner = ({ color }) => {
   return (

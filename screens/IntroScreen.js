@@ -42,7 +42,7 @@ function IntroScreen({ navigation }) {
       <View style={styles.container}>
         <View
           style={{
-            marginTop: height < 700 ? "15%" : height < 800 ? "20%" : "25%",
+            marginTop: height < 700 ? "10%" : height < 800 ? "15%" : "20%",
           }}
         >
           <Image
@@ -50,13 +50,14 @@ function IntroScreen({ navigation }) {
             style={{
               width: "70%",
               alignSelf: "center",
-              height: 70,
+              height: height < 800 ? 35 : 70,
             }}
           />
         </View>
         <View
           style={{
-            marginVertical: "5%",
+            marginVertical: height < 800 ? "3%" : "5%",
+            marginTop: height < 800 ? 0 : "5%",
           }}
         >
           <Animation
@@ -87,7 +88,7 @@ function IntroScreen({ navigation }) {
           bottom: 0,
           backgroundColor: COLORS.primary,
           width: "100%",
-          height: "15%",
+          height: height < 800 ? "12%" : "15%",
           borderTopRightRadius: 40,
           alignItems: "center",
           justifyContent: "center",
