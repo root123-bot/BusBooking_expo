@@ -63,7 +63,7 @@ export const RouteCard = () => {
     <View
       style={{
         backgroundColor: "red",
-        heigh: 500,
+        height: 500,
       }}
     >
       <Text>RouteCard</Text>

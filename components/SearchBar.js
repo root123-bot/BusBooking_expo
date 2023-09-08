@@ -2,6 +2,7 @@ import React, { useRef, useEffect, memo, useContext, useState } from "react";
 import { View, ActivityIndicator, StatusBar, StyleSheet } from "react-native";
 import { Searchbar } from "react-native-paper";
 import { AppContext } from "../store/context";
+import { COLORS } from "../constants/colors";
 
 function SearchComponent({ searchQueryHandler }) {
   const AppCtx = useContext(AppContext);
@@ -22,9 +23,9 @@ function SearchComponent({ searchQueryHandler }) {
             AppCtx.manipulateToggleFavorite(false);
           }
         }}
-        placeholderTextColor="grey"
+        placeholderTextColor={COLORS.darkprimary}
         elevation={2}
-        iconColor="grey"
+        iconColor={COLORS.darkprimary}
         value={searchQuery}
         style={{
           borderRadius: 10,
