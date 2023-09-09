@@ -70,3 +70,18 @@ export const RouteCard = () => {
     </View>
   );
 };
+
+export const CustomLine = ({ style }) => {
+  return (
+    <View
+      style={[
+        {
+          marginBottom: 10,
+          borderBottomWidth: 1,
+          borderBottomColor: "#cfcfcf",
+        },
+        style,
+      ]}
+    ></View>
+  );
+};

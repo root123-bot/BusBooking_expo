@@ -19,6 +19,7 @@ import { Picker } from "@react-native-picker/picker";
 // import DatePicker from "react-native-date-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
+import { CustomLine } from "../../../components/ui";
 
 const { height } = Dimensions.get("window");
 
@@ -530,22 +531,26 @@ function HomeScreen() {
                 style={{
                   marginTop: 10,
                   flexDirection: "row",
-                  justifyContent: "space-between",
+                  // justifyContent: "space-between",
                   alignItems: "center",
                 }}
               >
-                <View>
+                <View
+                  style={{
+                    width: "35%",
+                  }}
+                >
                   <Text
                     style={{
                       fontFamily: "montserrat-17",
                       fontSize: 17,
                     }}
+                    numberOfLines={1}
                   >
                     Dar es salaam
                   </Text>
                 </View>
 
-                {/* <Ionicons name="arrow-back" size={26} /> */}
                 <Image
                   source={require("../../../assets/images/icons/right-arrow.png")}
                   style={{
@@ -553,12 +558,18 @@ function HomeScreen() {
                     height: 20,
                   }}
                 />
-                <View>
+                <View
+                  style={{
+                    width: "35%",
+                  }}
+                >
                   <Text
                     style={{
                       fontFamily: "montserrat-17",
                       fontSize: 17,
+                      textAlign: "right",
                     }}
+                    numberOfLines={1}
                   >
                     Tunduma
                   </Text>
@@ -588,6 +599,195 @@ function HomeScreen() {
                   label={"Passengers"}
                   activeOutlineColor="black"
                 />
+              </View>
+            </View>
+          </View>
+          <View
+            style={{
+              width: "85%",
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 20,
+                fontFamily: "overpass-reg",
+                color: "black",
+                marginTop: 10,
+              }}
+            >
+              Popular Routes
+            </Text>
+          </View>
+          <View
+            style={{
+              width: "85%",
+              marginLeft: "auto",
+              marginRight: "auto",
+              marginTop: "2%",
+              marginBottom: "20%",
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: COLORS.light,
+                borderRadius: 15,
+                padding: 13,
+                shadowColor: "black",
+                shadowOffset: {
+                  width: 0,
+                  height: 2,
+                },
+                elevation: 5,
+                shadowOpacity: 0.5,
+                shadowRadius: 3.84,
+              }}
+            >
+              <View
+                style={{
+                  marginVertical: 10,
+                  flexDirection: "row",
+                  // justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    width: "35%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "montserrat-17",
+                      fontSize: 17,
+                    }}
+                    numberOfLines={1}
+                  >
+                    Dar es salaam
+                  </Text>
+                </View>
+                <Image
+                  source={require("../../../assets/images/icons/right-arrow.png")}
+                  style={{
+                    width: "30%",
+                    height: 20,
+                  }}
+                />
+                <View
+                  style={{
+                    width: "35%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "montserrat-17",
+                      fontSize: 17,
+                      textAlign: "right",
+                    }}
+                    numberOfLines={1}
+                  >
+                    Tunduma
+                  </Text>
+                </View>
+              </View>
+              <CustomLine />
+              <View
+                style={{
+                  marginVertical: 10,
+                  flexDirection: "row",
+                  // justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    width: "35%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "montserrat-17",
+                      fontSize: 17,
+                    }}
+                    numberOfLines={1}
+                  >
+                    Morogoro
+                  </Text>
+                </View>
+
+                <Image
+                  source={require("../../../assets/images/icons/right-arrow.png")}
+                  style={{
+                    width: "30%",
+                    height: 20,
+                  }}
+                />
+                <View
+                  style={{
+                    width: "35%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "montserrat-17",
+                      fontSize: 17,
+                      textAlign: "right",
+                    }}
+                    numberOfLines={1}
+                  >
+                    Dar es salaam
+                  </Text>
+                </View>
+              </View>
+              <CustomLine />
+              <View
+                style={{
+                  marginVertical: 10,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    width: "35%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "montserrat-17",
+                      fontSize: 17,
+                    }}
+                    numberOfLines={1}
+                  >
+                    Mwanza
+                  </Text>
+                </View>
+
+                <Image
+                  source={require("../../../assets/images/icons/right-arrow.png")}
+                  style={{
+                    width: "30%",
+                    height: 20,
+                  }}
+                />
+                <View
+                  style={{
+                    width: "35%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "montserrat-17",
+                      fontSize: 17,
+                      textAlign: "right",
+                    }}
+                    numberOfLines={1}
+                  >
+                    Dodoma
+                  </Text>
+                </View>
               </View>
             </View>
           </View>
