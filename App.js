@@ -28,6 +28,7 @@ import { LoadingSpinner } from "./components/ui";
 import IntroScreen from "./screens/IntroScreen";
 import HomeScreen from "./screens/BottomTabs/HomeStack/HomeScreen";
 import { Ionicons } from "@expo/vector-icons";
+import DetailsScreen from "./screens/BottomTabs/HomeStack/DetailsScreen";
 
 const Stack = createNativeStackNavigator();
 const Stack1 = createStackNavigator();
@@ -43,7 +44,7 @@ function MyTabs() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: COLORS.primary,
+        tabBarActiveTintColor: COLORS.darkprimary,
         tabBarShowLabel: false,
       }}
     >
@@ -55,7 +56,7 @@ function MyTabs() {
           ),
         }}
         name="HomeStack"
-        component={HomeScreen}
+        component={HomeStack}
       />
       <Tab.Screen
         options={{
@@ -88,6 +89,19 @@ function MyTabs() {
         component={HomeScreen}
       />
     </Tab.Navigator>
+  );
+}
+
+function HomeStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="HomeScreen" component={HomeScreen} />
+      <Stack.Screen name="RouteSearchDetails" component={DetailsScreen} />
+    </Stack.Navigator>
   );
 }
 

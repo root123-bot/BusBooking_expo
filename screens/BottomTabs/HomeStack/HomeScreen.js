@@ -130,7 +130,7 @@ function RouterCard() {
   );
 }
 
-function HomeScreen() {
+function HomeScreen({ navigation }) {
   const [from, setFrom] = useState("Dar es salaam");
   const [fromIcon, setFromIcon] = useState("chevron-down");
   const [toggleFromIcon, setToggleFromIcon] = useState("none");
@@ -455,7 +455,7 @@ function HomeScreen() {
                     backgroundColor: COLORS.darkprimary,
                     borderRadius: 15,
                   }}
-                  onPress={() => console.log("I need to go next")}
+                  onPress={() => navigation.navigate("RouteSearchDetails")}
                 >
                   Search
                 </Button>
