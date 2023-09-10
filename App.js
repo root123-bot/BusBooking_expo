@@ -27,11 +27,69 @@ import { _cacheResourcesAsync } from "./utils";
 import { LoadingSpinner } from "./components/ui";
 import IntroScreen from "./screens/IntroScreen";
 import HomeScreen from "./screens/BottomTabs/HomeStack/HomeScreen";
+import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createNativeStackNavigator();
 const Stack1 = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
+
+function TabIcon({ focused, color, size, name }) {
+  return <Ionicons color={focused ? color : "grey"} name={name} size={size} />;
+}
+
+function MyTabs() {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: COLORS.primary,
+        tabBarShowLabel: false,
+      }}
+    >
+      <Tab.Screen
+        options={{
+          title: "Home",
+          tabBarIcon: ({ focused, size, color }) => (
+            <TabIcon size={size} color={color} name="home" focused={focused} />
+          ),
+        }}
+        name="HomeStack"
+        component={HomeScreen}
+      />
+      <Tab.Screen
+        options={{
+          title: "Notifications",
+          tabBarIcon: ({ focused, size, color }) => (
+            <TabIcon
+              size={size}
+              color={color}
+              name="notifications"
+              focused={focused}
+            />
+          ),
+        }}
+        name="NotificationStack"
+        component={HomeScreen}
+      />
+      <Tab.Screen
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ focused, size, color }) => (
+            <TabIcon
+              size={size}
+              color={color}
+              name="person"
+              focused={focused}
+            />
+          ),
+        }}
+        name="ProfileStack"
+        component={HomeScreen}
+      />
+    </Tab.Navigator>
+  );
+}
 
 function Navigation() {
   return (
@@ -45,7 +103,7 @@ function Navigation() {
         <Stack.Screen component={IntroScreen} name="IntroScreen" />
         {/* then we have this full app with bottom tabs and nested stack */}
 
-        <Stack.Screen component={HomeScreen} name="HomeScreen" />
+        <Stack.Screen component={MyTabs} name="MyTabs" />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -455,6 +455,7 @@ function HomeScreen() {
                     backgroundColor: COLORS.darkprimary,
                     borderRadius: 15,
                   }}
+                  onPress={() => console.log("I need to go next")}
                 >
                   Search
                 </Button>
@@ -595,7 +596,7 @@ function HomeScreen() {
                   disabled
                   left={<TextInput.Icon icon="account" />}
                   onChangeText={(text) => setPassengers(text)}
-                  value={passengers}
+                  value={"1"}
                   label={"Passengers"}
                   activeOutlineColor="black"
                 />

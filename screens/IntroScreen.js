@@ -101,7 +101,7 @@ function IntroScreen({ navigation }) {
         >
           <SwipeButton
             disableResetOnTap
-            onSwipeSuccess={() => navigation.navigate("HomeScreen")}
+            onSwipeSuccess={() => navigation.navigate("MyTabs")}
             forceReset={(reset) => {
               forceResetLastButton = reset;
             }}
