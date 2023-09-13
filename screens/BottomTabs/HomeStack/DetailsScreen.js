@@ -194,7 +194,7 @@ function DetailsScreen({ navigation }) {
                     color: COLORS.darkprimary,
                   }}
                 >
-                  Ticket: #23
+                  09:30 PM
                 </Text>
               </View>
               <View
