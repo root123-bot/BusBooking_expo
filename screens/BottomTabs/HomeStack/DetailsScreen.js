@@ -1,10 +1,11 @@
 import React from "react";
-import { View, StyleSheet, Text, Image } from "react-native";
+import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { COLORS } from "../../../constants/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { TextInput } from "react-native-paper";
 
 function DetailsScreen({ navigation }) {
   return (
@@ -13,15 +14,11 @@ function DetailsScreen({ navigation }) {
       <View
         style={{
           flex: 1,
-          position: "relative",
           backgroundColor: COLORS.background,
         }}
       >
         <View
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
             width: "100%",
             height: "15%",
             backgroundColor: COLORS.darkprimary,
@@ -147,6 +144,142 @@ function DetailsScreen({ navigation }) {
             </View>
           </View>
         </View>
+        <ScrollView
+          style={{
+            paddingVertical: 20,
+          }}
+        >
+          <View
+            style={{
+              width: "90%",
+              marginLeft: "auto",
+              marginRight: "auto",
+              marginTop: "2%",
+              marginBottom: "5%",
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: COLORS.light,
+                borderRadius: 15,
+                padding: 13,
+                shadowColor: "black",
+                shadowOffset: {
+                  width: 0,
+                  height: 2,
+                },
+                elevation: 5,
+                shadowOpacity: 0.5,
+                shadowRadius: 3.84,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "overpass-reg",
+                  }}
+                >
+                  Hiace #109
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "overpass-reg",
+                    color: COLORS.darkprimary,
+                  }}
+                >
+                  Ticket: #23
+                </Text>
+              </View>
+              <View
+                style={{
+                  marginTop: 10,
+                  flexDirection: "row",
+                  // justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    width: "35%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "montserrat-17",
+                      fontSize: 17,
+                    }}
+                    numberOfLines={1}
+                  >
+                    Dar es salaam
+                  </Text>
+                </View>
+
+                <Image
+                  source={require("../../../assets/images/icons/right-arrow.png")}
+                  style={{
+                    width: "30%",
+                    height: 20,
+                  }}
+                />
+                <View
+                  style={{
+                    width: "35%",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "montserrat-17",
+                      fontSize: 17,
+                      textAlign: "right",
+                    }}
+                    numberOfLines={1}
+                  >
+                    Mombasa
+                  </Text>
+                </View>
+              </View>
+              <View
+                style={{
+                  marginTop: 10,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <TextInput
+                  mode="outlined"
+                  // disabled={true}
+                  editable={false}
+                  left={<TextInput.Icon icon="clock-fast" />}
+                  value={"08:30 PM"}
+                  style={{
+                    width: "48%",
+                  }}
+                  label={"Arrival Time"}
+                />
+                <TextInput
+                  mode="outlined"
+                  editable={false}
+                  left={<TextInput.Icon icon="clock-fast" />}
+                  onChangeText={(text) => setPassengers(text)}
+                  value={"09:30 PM"}
+                  label={"Departure Time"}
+                  style={{
+                    width: "48%",
+                  }}
+                  activeOutlineColor="black"
+                />
+              </View>
+            </View>
+          </View>
+        </ScrollView>
       </View>
     </>
   );
