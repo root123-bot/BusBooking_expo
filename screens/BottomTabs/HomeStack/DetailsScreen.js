@@ -281,6 +281,9 @@ function DetailsScreen({ navigation }) {
             </View>
           </View> */}
           <RouteCard />
+          <RouteCard />
+          <RouteCard />
+          <RouteCard />
         </ScrollView>
       </View>
     </>

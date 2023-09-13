@@ -1,11 +1,11 @@
 import React, { memo } from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity, Pressable } from "react-native";
 import { TextInput } from "react-native-paper";
 import { COLORS } from "../constants/colors";
 
 function RouteCard() {
   return (
-    <View
+    <Pressable
       style={{
         width: "90%",
         marginLeft: "auto",
@@ -13,6 +13,7 @@ function RouteCard() {
         marginTop: "2%",
         marginBottom: "5%",
       }}
+      onPress={() => console.log("Im impressed")}
     >
       <View
         style={{
@@ -134,7 +135,7 @@ function RouteCard() {
           />
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }
 
