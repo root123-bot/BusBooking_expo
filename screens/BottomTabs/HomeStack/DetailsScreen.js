@@ -6,6 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { TextInput } from "react-native-paper";
+import RouteCard from "../../../components/RouteCard";
 
 function DetailsScreen({ navigation }) {
   return (
@@ -149,7 +150,7 @@ function DetailsScreen({ navigation }) {
             paddingVertical: 20,
           }}
         >
-          <View
+          {/* <View
             style={{
               width: "90%",
               marginLeft: "auto",
@@ -278,7 +279,8 @@ function DetailsScreen({ navigation }) {
                 />
               </View>
             </View>
-          </View>
+          </View> */}
+          <RouteCard />
         </ScrollView>
       </View>
     </>
