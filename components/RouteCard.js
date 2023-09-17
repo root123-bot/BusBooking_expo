@@ -2,8 +2,10 @@ import React, { memo } from "react";
 import { View, Text, Image, TouchableOpacity, Pressable } from "react-native";
 import { TextInput } from "react-native-paper";
 import { COLORS } from "../constants/colors";
+import { useNavigation } from "@react-navigation/native";
 
 function RouteCard() {
+  const navigation = useNavigation();
   return (
     <Pressable
       style={{
@@ -13,7 +15,11 @@ function RouteCard() {
         marginTop: "2%",
         marginBottom: "5%",
       }}
-      onPress={() => console.log("Im impressed")}
+      onPress={() =>
+        navigation.navigate("BusDetailsScreen", {
+          bus: "bus",
+        })
+      }
     >
       <View
         style={{
@@ -34,6 +40,7 @@ function RouteCard() {
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
           <Text
@@ -44,7 +51,7 @@ function RouteCard() {
           >
             Hiace #109
           </Text>
-          <Text
+          {/* <Text
             style={{
               fontSize: 14,
               fontFamily: "overpass-reg",
@@ -52,7 +59,32 @@ function RouteCard() {
             }}
           >
             09:30 PM
-          </Text>
+          </Text> */}
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "flex-end",
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "montserrat-17",
+                fontSize: 20,
+                color: COLORS.darkprimary,
+              }}
+            >
+              $20
+            </Text>
+            <Text
+              style={{
+                fontSize: 15,
+                fontFamily: "overpass-reg",
+                color: "#495057",
+              }}
+            >
+              /seat
+            </Text>
+          </View>
         </View>
         <View
           style={{

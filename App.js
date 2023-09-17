@@ -29,6 +29,8 @@ import IntroScreen from "./screens/IntroScreen";
 import HomeScreen from "./screens/BottomTabs/HomeStack/HomeScreen";
 import { Ionicons } from "@expo/vector-icons";
 import DetailsScreen from "./screens/BottomTabs/HomeStack/DetailsScreen";
+import BusDetailsScreen from "./screens/BottomTabs/HomeStack/BusDetailsScreen";
+import PickSeatsScreen from "./screens/BottomTabs/HomeStack/PickSeatsScreen";
 
 const Stack = createNativeStackNavigator();
 const Stack1 = createStackNavigator();
@@ -101,6 +103,8 @@ function HomeStack() {
     >
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
       <Stack.Screen name="RouteSearchDetails" component={DetailsScreen} />
+      <Stack.Screen name="BusDetailsScreen" component={BusDetailsScreen} />
+      <Stack.Screen name="PickSeatsScreen" component={PickSeatsScreen} />
     </Stack.Navigator>
   );
 }

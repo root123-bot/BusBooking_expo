@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { COLORS } from "../../../constants/colors";
@@ -48,7 +48,9 @@ function DetailsScreen({ navigation }) {
                     width: "20%",
                   }}
                 >
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("HomeScreen")}
+                  >
                     <Ionicons name="arrow-back" size={24} color="white" />
                   </TouchableOpacity>
                 </View>
@@ -298,4 +300,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DetailsScreen;
+export default memo(DetailsScreen);

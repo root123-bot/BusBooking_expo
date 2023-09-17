@@ -20,7 +20,7 @@ import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
 import { CustomLine } from "../../../components/ui";
-
+import * as RNPaper from "react-native-paper";
 const { height } = Dimensions.get("window");
 
 function RouterCard() {
@@ -453,7 +453,7 @@ function HomeScreen({ navigation }) {
                   labelStyle={{ fontFamily: "montserrat-17", color: "white" }}
                   style={{
                     backgroundColor: COLORS.darkprimary,
-                    borderRadius: 15,
+                    borderRadius: 25,
                   }}
                   onPress={() => navigation.navigate("RouteSearchDetails")}
                 >
