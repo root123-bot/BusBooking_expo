@@ -232,7 +232,7 @@ function PickSeatsScreen({ route, navigation }) {
               shadowRadius: 3.84,
               marginVertical: 10,
               marginTop: 20,
-              paddingBottom: 100,
+              paddingBottom: 80,
               //   flexDirection: "row",
               //   justifyContent: "space-between",
               //   alignItems: "flex-start",
@@ -370,7 +370,7 @@ function PickSeatsScreen({ route, navigation }) {
                         color: COLORS.lightGrey,
                       }}
                     >
-                      Chosen
+                      Chosen (0)
                     </RNPaper.Text>
                   </View>
                   <View
@@ -409,12 +409,10 @@ function PickSeatsScreen({ route, navigation }) {
                   row={14}
                   layout={{ columnOne: 1, columnTwo: 2 }}
                   selectedSeats={[
-                    { seatNumber: 1, seatType: "booked" },
                     { seatNumber: 11, seatType: "women" },
                     { seatNumber: 17, seatType: "women" },
                   ]}
                   numberTextStyle={{ fontSize: 12 }}
-                  // seatImage={{ image: SleeperSeatIcon, tintColor: "#B2B2B2" }}
                   getBookedSeats={(seats) => {
                     console.log("getBookedSeats :: ", seats);
                   }}
