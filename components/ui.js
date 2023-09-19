@@ -3,6 +3,7 @@ import {
   View,
   ActivityIndicator,
   StatusBar,
+  ImageBackground,
   StyleSheet,
   Text,
   useContext,
@@ -11,6 +12,7 @@ import AnimatedLottieView from "lottie-react-native";
 import { Searchbar } from "react-native-paper";
 import { COLORS } from "../constants/colors";
 import { AppContext } from "../store/context";
+import { LinearGradient } from "expo-linear-gradient";
 
 export const LoadingSpinner = ({ color }) => {
   return (
@@ -83,5 +85,26 @@ export const CustomLine = ({ style }) => {
         style,
       ]}
     ></View>
+  );
+};
+
+export const Background = ({ children, image, style }) => {
+  return (
+    <>
+      <LinearGradient
+        colors={["#000000", "#000000"]}
+        style={[{ flex: 1 }, style && style]}
+      >
+        <ImageBackground
+          style={{
+            flex: 1,
+          }}
+          imageStyle={{ opacity: 0.5 }}
+          source={image ? image : require("../assets/images/background/2.jpg")}
+        >
+          {children}
+        </ImageBackground>
+      </LinearGradient>
+    </>
   );
 };

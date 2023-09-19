@@ -31,6 +31,7 @@ import { Ionicons } from "@expo/vector-icons";
 import DetailsScreen from "./screens/BottomTabs/HomeStack/DetailsScreen";
 import BusDetailsScreen from "./screens/BottomTabs/HomeStack/BusDetailsScreen";
 import PickSeatsScreen from "./screens/BottomTabs/HomeStack/PickSeatsScreen";
+import Notification from "./screens/BottomTabs/NotificationStack";
 
 const Stack = createNativeStackNavigator();
 const Stack1 = createStackNavigator();
@@ -62,7 +63,7 @@ function MyTabs() {
       />
       <Tab.Screen
         options={{
-          title: "Notifications",
+          title: "NotificationStack",
           tabBarIcon: ({ focused, size, color }) => (
             <TabIcon
               size={size}
@@ -73,7 +74,7 @@ function MyTabs() {
           ),
         }}
         name="NotificationStack"
-        component={HomeScreen}
+        component={NotificationStack}
       />
       <Tab.Screen
         options={{
@@ -91,6 +92,18 @@ function MyTabs() {
         component={HomeScreen}
       />
     </Tab.Navigator>
+  );
+}
+
+function NotificationStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="Notificatons" component={Notification} />
+    </Stack.Navigator>
   );
 }
 
