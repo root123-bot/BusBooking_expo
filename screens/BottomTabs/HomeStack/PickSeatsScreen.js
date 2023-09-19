@@ -483,9 +483,9 @@ function PickSeatsScreen({ route, navigation }) {
               labelStyle={{
                 fontWeight: "bold",
               }}
-              onPress={() => navigation.navigate("PickSeatsScreen")}
+              onPress={() => navigation.navigate("FillPassengerInfo")}
             >
-              Pay Now
+              Next
             </RNPaper.Button>
           </View>
         </View>

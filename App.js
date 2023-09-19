@@ -32,6 +32,7 @@ import DetailsScreen from "./screens/BottomTabs/HomeStack/DetailsScreen";
 import BusDetailsScreen from "./screens/BottomTabs/HomeStack/BusDetailsScreen";
 import PickSeatsScreen from "./screens/BottomTabs/HomeStack/PickSeatsScreen";
 import Notification from "./screens/BottomTabs/NotificationStack";
+import FillPassengerInfo from "./screens/BottomTabs/HomeStack/PassengerInfo";
 
 const Stack = createNativeStackNavigator();
 const Stack1 = createStackNavigator();
@@ -118,6 +119,7 @@ function HomeStack() {
       <Stack.Screen name="RouteSearchDetails" component={DetailsScreen} />
       <Stack.Screen name="BusDetailsScreen" component={BusDetailsScreen} />
       <Stack.Screen name="PickSeatsScreen" component={PickSeatsScreen} />
+      <Stack.Screen name="FillPassengerInfo" component={FillPassengerInfo} />
     </Stack.Navigator>
   );
 }
