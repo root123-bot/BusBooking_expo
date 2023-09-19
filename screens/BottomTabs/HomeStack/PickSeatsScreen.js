@@ -406,7 +406,7 @@ function PickSeatsScreen({ route, navigation }) {
                 }}
               >
                 <SeatsLayout
-                  row={14}
+                  row={10}
                   layout={{ columnOne: 1, columnTwo: 2 }}
                   selectedSeats={[
                     { seatNumber: 11, seatType: "women" },
