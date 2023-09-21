@@ -1,17 +1,87 @@
-import React, { useContext, memo } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { memo, useContext, useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ImageBackground,
+  SafeAreaView,
+  ScrollView,
+} from "react-native";
 import { AppContext } from "../../../store/context";
-import { Background } from "../../../components/ui";
+import { Background, LoadingSpinner } from "../../../components/ui";
 import { COLORS } from "../../../constants/colors";
-import { Button } from "react-native-paper";
+import { Modal, Button } from "react-native-paper";
+import { BASE_URL } from "../../../utils/domain";
+import { TransparentPopUpIconMessage } from "../../../components/Messages";
+import * as ImageCache from "react-native-expo-image-cache";
+import TransparentBackButton from "../../../components/TransparentBackButton";
 
 function ProfileScreen({ navigation, route }) {
   const AppCtx = useContext(AppContext);
 
-  if (AppCtx.isAunthenticated) {
+  const [displayDialogue, setDisplayDialogue] = useState(false);
+  if (!AppCtx.isAunthenticated) {
     return (
-      <View style={styles.container}>
-        <Text>ProfileScreen</Text>
+      <View
+        style={{
+          flex: 1,
+          position: "relative",
+        }}
+      >
+        <View
+          style={[
+            { flex: 1 },
+            displayDialogue ? { opacity: 0.05 } : { opacity: 1 },
+          ]}
+          pointerEvents={displayDialogue ? "none" : "auto"}
+        >
+          <ImageBackground
+            style={styles.imgBack}
+            source={require("../../../assets/images/background/.jpg")}
+          >
+            <SafeAreaView style={styles.parentContainer}>
+              <ScrollView style={[styles.childContainer]}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setDisplayDialogue(true);
+                  }}
+                >
+                  <View style={styles.innerContainer}>
+                    <View
+                      style={[
+                        styles.iconHolder,
+                        AppCtx.usermetadata.get_image && {
+                          backgroundColor: "transparent",
+                        },
+                      ]}
+                    >
+                      <>
+                        <Image
+                          source={require("../../../assets/images/wide.png")}
+                          style={{
+                            width: "80%",
+                            height: "80%",
+                          }}
+                        />
+                      </>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+                <View style={styles.nameContainer}>
+                  <Text style={styles.phone}>
+                    +255623317196
+                    {/* {AppCtx.usermetadata.phone_number} */}
+                  </Text>
+                </View>
+                <View style={styles.footer}>
+                  <TransparentBackButton />
+                </View>
+              </ScrollView>
+            </SafeAreaView>
+          </ImageBackground>
+        </View>
       </View>
     );
   } else {
@@ -124,7 +194,7 @@ const styles = StyleSheet.create({
     width: 190,
     height: 190,
     borderRadius: 190 / 2, // kwenye android borderRadius kwa % inasumbua...ili upate round chukua width ya image / 2 instead ya kutumia %
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.darkprimary,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
