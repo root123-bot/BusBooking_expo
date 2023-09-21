@@ -39,7 +39,7 @@ function ProfileScreen({ navigation, route }) {
         >
           <ImageBackground
             style={styles.imgBack}
-            source={require("../../../assets/images/background/.jpg")}
+            source={require("../../../assets/images/background/2.jpg")}
           >
             <SafeAreaView style={styles.parentContainer}>
               <ScrollView style={[styles.childContainer]}>
