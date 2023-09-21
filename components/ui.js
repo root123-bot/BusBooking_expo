@@ -100,7 +100,7 @@ export const Background = ({ children, image, style }) => {
             flex: 1,
           }}
           imageStyle={{ opacity: 0.5 }}
-          source={image ? image : require("../assets/images/background/2.jpg")}
+          source={image ? image : require("../assets/images/background/4.jpg")}
         >
           {children}
         </ImageBackground>

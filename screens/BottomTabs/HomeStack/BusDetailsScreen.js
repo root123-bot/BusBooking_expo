@@ -465,6 +465,7 @@ function BusDetailsScreen({ navigation, route }) {
               shadowRadius: 3.84,
               marginVertical: 10,
               marginTop: 20,
+              marginBottom: 100,
               // backgroundColor: "red",
               //   flexDirection: "row",
               //   justifyContent: "space-between",

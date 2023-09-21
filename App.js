@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -20,7 +20,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
-import { useContext } from "react";
 import { COLORS } from "./constants/colors";
 import NetInfo from "@react-native-community/netinfo";
 import { _cacheResourcesAsync } from "./utils";
@@ -33,6 +32,13 @@ import BusDetailsScreen from "./screens/BottomTabs/HomeStack/BusDetailsScreen";
 import PickSeatsScreen from "./screens/BottomTabs/HomeStack/PickSeatsScreen";
 import Notification from "./screens/BottomTabs/NotificationStack";
 import FillPassengerInfo from "./screens/BottomTabs/HomeStack/PassengerInfo";
+import ProfileScreen from "./screens/BottomTabs/ProfileStack";
+import { AppContext } from "./store/context";
+import RegisterScreen from "./screens/BottomTabs/ProfileStack/Auth/RegisterScreen";
+import LoginScreen from "./screens/BottomTabs/ProfileStack/Auth/LoginScreen";
+import EnterOTPScreen from "./screens/BottomTabs/ProfileStack/Auth/EnterOTPScreen";
+import SetPinScreen from "./screens/BottomTabs/ProfileStack/Auth/SetPinScreen";
+import ForgotPassword from "./screens/BottomTabs/ProfileStack/Auth/ForgotPassword";
 
 const Stack = createNativeStackNavigator();
 const Stack1 = createStackNavigator();
@@ -90,7 +96,7 @@ function MyTabs() {
           ),
         }}
         name="ProfileStack"
-        component={HomeScreen}
+        component={ProfileStack}
       />
     </Tab.Navigator>
   );
@@ -120,6 +126,28 @@ function HomeStack() {
       <Stack.Screen name="BusDetailsScreen" component={BusDetailsScreen} />
       <Stack.Screen name="PickSeatsScreen" component={PickSeatsScreen} />
       <Stack.Screen name="FillPassengerInfo" component={FillPassengerInfo} />
+    </Stack.Navigator>
+  );
+}
+
+function ProfileStack() {
+  const AppCtx = useContext(AppContext);
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+      {!AppCtx.isAunthenticated && (
+        <>
+          <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="VerifyOTPScreen" component={EnterOTPScreen} />
+          <Stack.Screen name="SetPinScreen" component={SetPinScreen} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+        </>
+      )}
     </Stack.Navigator>
   );
 }

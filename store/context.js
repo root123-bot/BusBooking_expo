@@ -6,10 +6,12 @@ export const AppContext = createContext({
   usermetadata: {},
   favIcon: "heart-outline",
   toggleFavorite: false,
+  lastLoginPhoneNumber: null,
   manipulateIsAunthenticated: (value) => {},
   manipulateUserMetadata: (metadata) => {},
   manipulateFavIcon: (icon) => {},
   manipulateToggleFavorite: (status) => {},
+  manipulateLastLoginPhoneNumber: (phoneNumber) => {},
 });
 
 function AppContextProvider({ children }) {
@@ -17,6 +19,7 @@ function AppContextProvider({ children }) {
   const [usermetadata, setUserMetadata] = useState({});
   const [favIcon, setFavIcon] = useState("heart-outline");
   const [toggleFavorite, setToggleFavorite] = useState(false);
+  const [lastLoginPhoneNumber, setLastLoginPhoneNumber] = useState(null);
 
   const manipulateIsAunthenticated = (value) => {
     setIsAunthenticated(value);
@@ -24,6 +27,10 @@ function AppContextProvider({ children }) {
 
   function manipulateFavIcon(icon) {
     setFavIcon(icon);
+  }
+
+  function manipulateLastLoginPhoneNumber(phone_number) {
+    setLastLoginPhoneNumber(phone_number);
   }
 
   function manipulateToggleFavorite(status) {
@@ -44,10 +51,12 @@ function AppContextProvider({ children }) {
     usermetadata,
     favIcon,
     toggleFavorite,
+    lastLoginPhoneNumber,
     manipulateIsAunthenticated,
     manipulateUserMetadata,
     manipulateFavIcon,
     manipulateToggleFavorite,
+    manipulateLastLoginPhoneNumber,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

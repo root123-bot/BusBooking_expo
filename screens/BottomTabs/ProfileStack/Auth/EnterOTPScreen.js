@@ -1,26 +1,25 @@
-import React, { memo, useContext, useState, useEffect } from "react";
+import React, { memo, useContext, useEffect, useState } from "react";
 import { View, Text, StyleSheet, Keyboard } from "react-native";
+import { Background } from "../../../../components/ui";
 import { TransparentPopUpIconMessage } from "../../../../components/Messages";
 import { AppContext } from "../../../../store/context";
-import { Background } from "../../../../components/ui";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { COLORS } from "../../../../constants/colors";
-import * as Device from "expo-device";
-import { Button, HelperText } from "react-native-paper";
 import OTPInputView from "@twotalltotems/react-native-otp-input";
-import { BASE_URL } from "../../../../utils/domain";
+import { HelperText, Button, TextInput } from "react-native-paper";
 
-function SetPinScreen({ navigation, route }) {
+function EnterOTPScreen({ navigation, route }) {
   const AppCtx = useContext(AppContext);
   const { reset } = route.params ? route.params : { reset: false };
 
-  const [PIN, setPIN] = useState("");
+  const [code, setCode] = useState("");
   const [showAnimation, setShowAnimation] = useState(false);
   const [formSubmitLoader, setFormSubmitLoader] = useState(false);
   const [message, setMessage] = useState("");
   const [icon, setIcon] = useState("");
 
-  const savePinHandler = async () => {};
+  const verifyOTPHandler = () => {
+    navigation.navigate("SetPinScreen");
+  };
 
   return (
     <Background>
@@ -54,34 +53,41 @@ function SetPinScreen({ navigation, route }) {
           </View>
 
           <View style={styles.innerContainer}>
-            <Text style={styles.header}>Set Login PIN</Text>
+            <Text style={styles.head}>Confirm your OTP Code</Text>
             <HelperText style={styles.subheader}>
-              You will use this pin to login to your account.
+              Please check your OTP on mobile.
             </HelperText>
-
-            <OTPInputView
-              onCodeChanged={(msimbo) => setPIN(msimbo)}
-              selectionColor={COLORS.light}
+            <View
               style={{
-                width: "80%",
-                height: 100,
-                color: "grey",
+                alignItems: "center",
               }}
-              codeInputFieldStyle={styles.underlineStyleBase}
-              codeInputHighlightStyle={styles.underlineStyleHighLighted}
-              autoFocusOnLoad={false}
-              pinCount={4}
-            />
+            >
+              <OTPInputView
+                onCodeChanged={(msimbo) => setCode(msimbo)}
+                selectionColor={COLORS.light}
+                // autoFocusOnLoad={Platform.OS === "ios" ? true : false}
+                autoFocusOnLoad={false}
+                style={{
+                  width: "80%",
+                  height: 100,
+                  color: "grey",
+                }}
+                codeInputFieldStyle={styles.underlineStyleBase}
+                codeInputHighlightStyle={styles.underlineStyleHighLighted}
+                pinCount={4}
+              />
+            </View>
             <Button
               mode="contained"
               loading={formSubmitLoader}
               labelStyle={{
                 fontFamily: "montserrat-17",
+                color: COLORS.light,
               }}
               style={{
                 backgroundColor: COLORS.primary,
               }}
-              onPress={savePinHandler}
+              onPress={verifyOTPHandler}
             >
               Continue
             </Button>
@@ -92,34 +98,37 @@ function SetPinScreen({ navigation, route }) {
   );
 }
 
-export default SetPinScreen;
+export default EnterOTPScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "96%",
-    marginLeft: "auto",
-    marginRight: "auto",
     justifyContent: "center",
     alignItems: "center",
   },
   innerContainer: {
-    width: "100%",
-    padding: 15,
     backgroundColor: COLORS.darkprimary,
-    justifyContent: "center",
-    alignItems: "center",
     borderRadius: 10,
+    padding: 20,
   },
-  header: {
+  head: {
     fontSize: 20,
     fontFamily: "montserrat-17",
     color: COLORS.light,
+    textAlign: "center",
   },
   subheader: {
     fontFamily: "overpass-reg",
     textAlign: "center",
     color: COLORS.light,
+  },
+  borderStyleBase: {
+    width: 30,
+    height: 45,
+  },
+
+  borderStyleHighLighted: {
+    borderColor: "black",
   },
   underlineStyleBase: {
     width: 50,
@@ -128,7 +137,6 @@ const styles = StyleSheet.create({
     color: COLORS.light,
     borderWidth: 2,
   },
-
   underlineStyleHighLighted: {
     borderColor: COLORS.light,
   },
