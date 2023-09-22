@@ -39,6 +39,7 @@ function SetPinScreen({ navigation, route }) {
 
     registerUser(phone_number, usergroup, PIN, uniqueDeviceId)
       .then((result) => {
+        console.log("THIS IS RESULT FOR YOU ", result);
         if (result.data.usergroup.toLowerCase() === "passenger") {
           setMessage("Success");
           setIcon("check");
@@ -54,13 +55,11 @@ function SetPinScreen({ navigation, route }) {
             navigation.navigate("ProfileScreen");
           }, 1000);
           setShowAnimation(false);
-        } else {
-          // this is difficult to occur
         }
       })
       .catch((err) => {
-        if (err.error.message === "Namba ishasajiliwa") {
-          setMessage("Phone number exists");
+        if (err.message === "User already exist") {
+          setMessage("Phone exists");
         } else {
           setMessage("Failed");
         }
