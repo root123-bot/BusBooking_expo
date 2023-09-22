@@ -6,6 +6,7 @@ import { AppContext } from "../../../../store/context";
 import { COLORS } from "../../../../constants/colors";
 import OTPInputView from "@twotalltotems/react-native-otp-input";
 import { HelperText, Button, TextInput } from "react-native-paper";
+import { validateOTP } from "../../../../utils/requests";
 
 function EnterOTPScreen({ navigation, route }) {
   const AppCtx = useContext(AppContext);
@@ -18,7 +19,42 @@ function EnterOTPScreen({ navigation, route }) {
   const [icon, setIcon] = useState("");
 
   const verifyOTPHandler = () => {
-    navigation.navigate("SetPinScreen");
+    Keyboard.dismiss();
+    if (code.length !== 4) {
+      return;
+    }
+
+    setFormSubmitLoader(true);
+    setShowAnimation(true);
+    let phone = reset
+      ? AppCtx.resetPhoneNumber.phone_number
+      : AppCtx.registermetadata.phone_number;
+    console.log("THIS IS THE USER PHONE NUMBER ", AppCtx.registermetadata);
+    validateOTP(phone, code).then((result) => {
+      if (result.data) {
+        if (result.data.message === "OTP validated successfully") {
+          setMessage("Okay");
+          setIcon("check");
+          setTimeout(() => {
+            AppCtx.manipulateAlreadyValidated(true);
+            setFormSubmitLoader(false);
+            reset
+              ? navigation.navigate("SetPinScreen", {
+                  reset: true,
+                })
+              : navigation.navigate("SetPinScreen");
+          }, 1000);
+          setShowAnimation(false);
+        } else {
+          setMessage("OTP is not valid");
+          setIcon("close");
+          setTimeout(() => {
+            setFormSubmitLoader(false);
+          }, 1000);
+          setShowAnimation(false);
+        }
+      }
+    });
   };
 
   return (

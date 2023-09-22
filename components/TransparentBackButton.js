@@ -13,7 +13,7 @@ import { COLORS } from "../constants/colors";
 import { CustomLine } from "./ui";
 import { TransparentPopUpIconMessage } from "./Messages";
 import { AppContext } from "../store/context";
-import { BASE_URL } from "../utils/domain";
+import { BASE_URL } from "../constants/domain";
 
 function TransparentBackgroundButton({ title, subtitle, icon, color }) {
   const AppCtx = useContext(AppContext);

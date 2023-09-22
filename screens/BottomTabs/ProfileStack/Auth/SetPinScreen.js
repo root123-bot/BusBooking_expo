@@ -8,7 +8,8 @@ import { COLORS } from "../../../../constants/colors";
 import * as Device from "expo-device";
 import { Button, HelperText } from "react-native-paper";
 import OTPInputView from "@twotalltotems/react-native-otp-input";
-import { BASE_URL } from "../../../../utils/domain";
+import { BASE_URL } from "../../../../constants/domain";
+import { registerUser } from "../../../../utils/requests";
 
 function SetPinScreen({ navigation, route }) {
   const AppCtx = useContext(AppContext);
@@ -20,7 +21,56 @@ function SetPinScreen({ navigation, route }) {
   const [message, setMessage] = useState("");
   const [icon, setIcon] = useState("");
 
-  const savePinHandler = async () => {};
+  const savePinHandler = async () => {
+    Keyboard.dismiss();
+    if (PIN.length !== 4) {
+      return;
+    }
+    setFormSubmitLoader(true);
+    setShowAnimation(true);
+
+    if (reset) {
+      return;
+    }
+
+    const uniqueDeviceId = Device.osBuildId;
+    const phone_number = AppCtx.registermetadata.phone_number;
+    const usergroup = AppCtx.registermetadata.usergroup || "passenger";
+
+    registerUser(phone_number, usergroup, PIN, uniqueDeviceId)
+      .then((result) => {
+        if (result.data.usergroup.toLowerCase() === "passenger") {
+          setMessage("Success");
+          setIcon("check");
+
+          setTimeout(() => {
+            setFormSubmitLoader(false);
+            AppCtx.manipulateUserMetadata(result.data);
+            AsyncStorage.setItem("user_id", result.data.get_user_id.toString());
+            const phone = result.data.phone_number.toString();
+
+            AsyncStorage.setItem("phone_number", phone);
+            AppCtx.manipulateIsAunthenticated(true);
+            navigation.navigate("ProfileScreen");
+          }, 1000);
+          setShowAnimation(false);
+        } else {
+          // this is difficult to occur
+        }
+      })
+      .catch((err) => {
+        if (err.error.message === "Namba ishasajiliwa") {
+          setMessage("Phone number exists");
+        } else {
+          setMessage("Failed");
+        }
+        setIcon("close");
+        setTimeout(() => {
+          setFormSubmitLoader(false);
+        }, 1000);
+        setShowAnimation(false);
+      });
+  };
 
   return (
     <Background>

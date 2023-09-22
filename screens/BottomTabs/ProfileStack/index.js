@@ -13,7 +13,7 @@ import { AppContext } from "../../../store/context";
 import { Background, LoadingSpinner } from "../../../components/ui";
 import { COLORS } from "../../../constants/colors";
 import { Modal, Button } from "react-native-paper";
-import { BASE_URL } from "../../../utils/domain";
+import { BASE_URL } from "../../../constants/domain";
 import { TransparentPopUpIconMessage } from "../../../components/Messages";
 import * as ImageCache from "react-native-expo-image-cache";
 import TransparentBackButton from "../../../components/TransparentBackButton";
@@ -22,7 +22,7 @@ function ProfileScreen({ navigation, route }) {
   const AppCtx = useContext(AppContext);
 
   const [displayDialogue, setDisplayDialogue] = useState(false);
-  if (!AppCtx.isAunthenticated) {
+  if (AppCtx.isAunthenticated) {
     return (
       <View
         style={{

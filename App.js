@@ -33,7 +33,7 @@ import PickSeatsScreen from "./screens/BottomTabs/HomeStack/PickSeatsScreen";
 import Notification from "./screens/BottomTabs/NotificationStack";
 import FillPassengerInfo from "./screens/BottomTabs/HomeStack/PassengerInfo";
 import ProfileScreen from "./screens/BottomTabs/ProfileStack";
-import { AppContext } from "./store/context";
+import AppContextProvider, { AppContext } from "./store/context";
 import RegisterScreen from "./screens/BottomTabs/ProfileStack/Auth/RegisterScreen";
 import LoginScreen from "./screens/BottomTabs/ProfileStack/Auth/LoginScreen";
 import EnterOTPScreen from "./screens/BottomTabs/ProfileStack/Auth/EnterOTPScreen";
@@ -255,7 +255,9 @@ export default function App() {
     >
       <StatusBar style="light" />
       {connectionStatus ? (
-        <Navigation />
+        <AppContextProvider>
+          <Navigation />
+        </AppContextProvider>
       ) : (
         <NetworkCheck status={connectionStatus} type={connectionType} />
       )}
