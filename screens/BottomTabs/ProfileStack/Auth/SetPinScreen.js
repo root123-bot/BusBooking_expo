@@ -9,7 +9,11 @@ import * as Device from "expo-device";
 import { Button, HelperText } from "react-native-paper";
 import OTPInputView from "@twotalltotems/react-native-otp-input";
 import { BASE_URL } from "../../../../constants/domain";
-import { registerUser } from "../../../../utils/requests";
+import {
+  executeUserMetadata,
+  registerUser,
+  resetPIN,
+} from "../../../../utils/requests";
 
 function SetPinScreen({ navigation, route }) {
   const AppCtx = useContext(AppContext);
@@ -30,6 +34,44 @@ function SetPinScreen({ navigation, route }) {
     setShowAnimation(true);
 
     if (reset) {
+      // usiwaze kuhusu jina hii "resetPhoneNumber" it holds full data phone, user_id etc
+      const { user_id } = AppCtx.resetPhoneNumber;
+
+      resetPIN(user_id, PIN);
+      await AsyncStorage.setItem("user_id", user_id.toString());
+
+      try {
+        const metadata = await executeUserMetadata(user_id);
+        AppCtx.manipulateUserMetadata(metadata);
+      } catch (err) {
+        if (
+          err.message.toLowerCase().includes("Unrecognized user".toLowerCase())
+        ) {
+          const splitted = err.message.split(" ");
+          const user_id = splitted[splitted.length - 1];
+          fetch(`${BASE_URL}/api/delete_user/`, {
+            method: "POST",
+            body: JSON.stringify({
+              user_id,
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          // lets logout
+          AppCtx.logout();
+          alert("Your account have been deleted, register again.");
+        } else {
+          alert(err.message);
+        }
+        return;
+      }
+
+      setShowAnimation(false);
+      setFormSubmitLoader(false);
+      AppCtx.manipulateIsAunthenticated(true);
+
+      navigation.navigate("ProfileScreen");
       return;
     }
 

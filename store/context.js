@@ -11,6 +11,7 @@ export const AppContext = createContext({
   registermetadata: {},
   alreadyValidated: false,
   stillExecutingUserMetadata: true,
+  resetPhoneNumber: {},
   manipulateIsAunthenticated: (value) => {},
   manipulateUserMetadata: (metadata) => {},
   manipulateFavIcon: (icon) => {},
@@ -19,6 +20,8 @@ export const AppContext = createContext({
   addRegisterMetadata: (metadata) => {},
   clearRegisterMetadata: () => {},
   manipulateAlreadyValidated: (status) => {},
+  manipulateResetPhoneNumber: (metadata) => {},
+  logout: () => {},
 });
 
 function AppContextProvider({ children }) {
@@ -29,6 +32,8 @@ function AppContextProvider({ children }) {
   const [lastLoginPhoneNumber, setLastLoginPhoneNumber] = useState(null);
   const [registermetadata, setRegisterMetadata] = useState({});
   const [alreadyValidated, setAlreadyValidated] = useState(false);
+  const [resetPhoneNumber, setResetPhoneNumber] = useState({});
+
   const [stillExecutingUserMetadata, setStillExecutingUserMetadata] =
     useState(true);
 
@@ -42,6 +47,15 @@ function AppContextProvider({ children }) {
 
   function manipulateLastLoginPhoneNumber(phone_number) {
     setLastLoginPhoneNumber(phone_number);
+  }
+
+  function manipulateResetPhoneNumber(metadata) {
+    setResetPhoneNumber((prevState) => {
+      return {
+        ...prevState,
+        ...metadata,
+      };
+    });
   }
 
   function manipulateAlreadyValidated(status) {
@@ -71,6 +85,7 @@ function AppContextProvider({ children }) {
     setIsAunthenticated(false);
     setUserMetadata({});
     setStillExecutingUserMetadata(true);
+    setResetPhoneNumber({});
     AsyncStorage.removeItem("user_id");
   }
 
@@ -177,6 +192,7 @@ function AppContextProvider({ children }) {
     registermetadata,
     alreadyValidated,
     stillExecutingUserMetadata,
+    resetPhoneNumber,
     manipulateIsAunthenticated,
     manipulateUserMetadata,
     manipulateFavIcon,
@@ -186,6 +202,7 @@ function AppContextProvider({ children }) {
     clearRegisterMetadata,
     manipulateAlreadyValidated,
     logout,
+    manipulateResetPhoneNumber,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

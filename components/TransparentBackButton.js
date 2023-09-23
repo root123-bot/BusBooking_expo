@@ -24,7 +24,7 @@ function TransparentBackgroundButton({ title, subtitle, icon, color }) {
   const [formSubmitLoader, setFormSubmitLoader] = useState(false);
 
   function logoutHandler() {
-    AppCtx.lo;
+    AppCtx.logout();
   }
 
   function deleteAccountHandler() {

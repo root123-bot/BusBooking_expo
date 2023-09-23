@@ -132,3 +132,51 @@ export const loginUser = async (phone, password) => {
     .then((data) => Promise.resolve(data))
     .catch((error) => Promise.reject(error));
 };
+
+export const resetPIN = async (user_id, pin) => {
+  return fetch(`${BASE_URL}/api/resetpin/`, {
+    method: "POST",
+    body: JSON.stringify({
+      user_id,
+      pin,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      console.log("This is status code ", response.status);
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw new Error("Something went wrong");
+      }
+    })
+    .then((data) => Promise.resolve({ data }))
+    .catch((error) => {
+      return Promise.reject({ error });
+    });
+};
+
+export const isUserExist = async (phone_number) => {
+  return fetch(`${BASE_URL}/api/isuserexist/`, {
+    method: "POST",
+    body: JSON.stringify({
+      phone: phone_number,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw new Error("Server error");
+      }
+    })
+    .then((data) => Promise.resolve(data))
+    .catch((error) => {
+      return Promise.reject(error);
+    });
+};
