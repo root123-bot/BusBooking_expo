@@ -54,30 +54,29 @@ function ProfileScreen({ navigation, route }) {
                   }}
                 >
                   <View style={styles.innerContainer}>
-                    <View
+                    <ImageCache.Image
+                      tint="light"
+                      transitionDuration={300}
                       style={[
-                        styles.iconHolder,
-                        AppCtx.usermetadata.get_image && {
-                          backgroundColor: "transparent",
+                        styles.iconimg,
+                        AppCtx.usermetadata.get_avatar && {
+                          width: 190,
+                          height: 190,
+                          borderRadius: 190 / 2,
                         },
                       ]}
-                    >
-                      <>
-                        <Image
-                          source={require("../../../assets/images/wide.png")}
-                          style={{
-                            width: "80%",
-                            height: "80%",
-                          }}
-                        />
-                      </>
-                    </View>
+                      {...{
+                        preview: {
+                          uri: `${BASE_URL}${AppCtx.usermetadata.get_avatar}`,
+                        },
+                        uri: `${BASE_URL}${AppCtx.usermetadata.get_avatar}`,
+                      }}
+                    />
                   </View>
                 </TouchableOpacity>
                 <View style={styles.nameContainer}>
                   <Text style={styles.phone}>
-                    +255623317196
-                    {/* {AppCtx.usermetadata.phone_number} */}
+                    {AppCtx.usermetadata.phone_number}
                   </Text>
                 </View>
                 <View style={styles.footer}>
@@ -186,10 +185,10 @@ const styles = StyleSheet.create({
   },
   parentContainer: {
     flex: 1,
-    marginTop: 60,
   },
   childContainer: {
     flex: 1,
+    paddingTop: 50,
   },
   innerContainer: {
     marginTop: 14,
