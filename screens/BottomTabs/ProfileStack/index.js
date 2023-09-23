@@ -22,6 +22,11 @@ function ProfileScreen({ navigation, route }) {
   const AppCtx = useContext(AppContext);
 
   const [displayDialogue, setDisplayDialogue] = useState(false);
+
+  if (AppCtx.stillExecutingUserMetadata) {
+    return <LoadingSpinner />;
+  }
+
   if (AppCtx.isAunthenticated) {
     return (
       <View

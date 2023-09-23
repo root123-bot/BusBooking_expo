@@ -1,4 +1,4 @@
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome5, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { memo, useContext, useState } from "react";
 import {
@@ -24,7 +24,7 @@ function TransparentBackgroundButton({ title, subtitle, icon, color }) {
   const [formSubmitLoader, setFormSubmitLoader] = useState(false);
 
   function logoutHandler() {
-    AppCtx.logout();
+    AppCtx.lo;
   }
 
   function deleteAccountHandler() {
@@ -90,6 +90,22 @@ function TransparentBackgroundButton({ title, subtitle, icon, color }) {
         style={[styles.container, { zIndex: -1 }]}
         pointerEvents={formSubmitLoader ? "none" : "auto"}
       >
+        <TouchableOpacity
+          onPress={() => {
+            // AppCtx.manipulateTargettedChangePassword("customer");
+            // navigation.navigate("ChangePassword");
+          }}
+        >
+          <View style={styles.itemContainer}>
+            <View style={styles.iconHolder}>
+              <Ionicons name="bus" size={30} color="grey" />
+            </View>
+            <View>
+              <Text style={styles.title}>My Tickets</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+        <CustomLine color={"grey"} style={styles.customLine} />
         <TouchableOpacity
           onPress={() => {
             // AppCtx.manipulateTargettedChangePassword("customer");

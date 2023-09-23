@@ -14,6 +14,7 @@ import { COLORS } from "../../../../constants/colors";
 import { AppContext } from "../../../../store/context";
 import { TransparentPopUpIconMessage } from "../../../../components/Messages";
 import { TextInput, Button } from "react-native-paper";
+import { loginUser } from "../../../../utils/requests";
 
 function LoginScreen({ route, navigation }) {
   const AppCtx = useContext(AppContext);
@@ -42,6 +43,76 @@ function LoginScreen({ route, navigation }) {
     isValid: true,
   });
 
+  async function loginHandler() {
+    Keyboard.dismiss();
+
+    const phoneValid = phone.value.length === 9 && !phone.value.startsWith("0");
+
+    const formattedValueValid = formattedValue.length === 13;
+
+    const nywilaValid = nywila.value.trim().length === 4;
+
+    if (!phoneValid || !nywilaValid) {
+      setPhone({ ...phone, isValid: phoneValid });
+      setNywila({ ...nywila, isValid: nywilaValid });
+      alert("Invalid phone number or password; check your input");
+      return;
+    }
+
+    setFormSubmitLoader(true);
+    setShowAnimation(true);
+    const phone_number = `${formattedValue}`;
+    const password = nywila.value;
+
+    loginUser(phone_number, password)
+      .then(async (result) => {
+        if (result.data) {
+          setMessage("Login successful");
+          setIcon("check");
+
+          AsyncStorage.setItem("user_id", result.data.get_user_id.toString());
+          AsyncStorage.setItem("phone_number", formattedValue.toString());
+
+          AppCtx.manipulateLastLoginPhoneNumber(formattedValue.toString());
+
+          AppCtx.manipulateUserMetadata(result.data);
+
+          const user_id = result.data.get_user_id;
+
+          setShowAnimation(false);
+          setTimeout(() => {
+            setFormSubmitLoader(false);
+            AppCtx.manipulateIsAunthenticated(true);
+            if (next === "Profile") {
+              navigation.navigate("ProfileScreen");
+            } else if (next === "Home") {
+              navigation.navigate("HomeScreen");
+            }
+          }, 1000);
+        } else {
+          setMessage("Invalid credentials");
+          setIcon("close");
+          setShowAnimation(false);
+          setTimeout(() => {
+            setFormSubmitLoader(false);
+          }, 1000);
+        }
+      })
+      .catch((err) => {
+        let message = "Request failed";
+        if (
+          err.message.toLowerCase().includes("Unrecognized user".toLowerCase())
+        ) {
+          message = "Invalid credentials";
+        }
+        setMessage(message);
+        setIcon("close");
+        setShowAnimation(false);
+        setTimeout(() => {
+          setFormSubmitLoader(false);
+        }, 1000);
+      });
+  }
   return (
     <Background>
       <View
@@ -185,7 +256,7 @@ function LoginScreen({ route, navigation }) {
             style={{
               backgroundColor: COLORS.primary,
             }}
-            // onPress={loginHandler}
+            onPress={loginHandler}
           >
             Continue
           </Button>

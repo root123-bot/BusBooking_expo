@@ -107,3 +107,28 @@ export const executeUserMetadata = async (uid) => {
       return Promise.reject(err);
     });
 };
+
+export const loginUser = async (phone, password) => {
+  return fetch(`${BASE_URL}/api/login/`, {
+    method: "POST",
+    body: JSON.stringify({
+      phone,
+      password,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        if (response.status === 401) {
+          throw new Error(`Unrecognized user group`);
+        }
+        throw new Error("Server error");
+      }
+    })
+    .then((data) => Promise.resolve(data))
+    .catch((error) => Promise.reject(error));
+};

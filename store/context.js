@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, useContext, useEffect, useState } from "react";
+import { BASE_URL } from "../constants/domain";
 
 export const AppContext = createContext({
   isAunthenticated: false,
@@ -157,6 +158,16 @@ function AppContextProvider({ children }) {
     }
   }
 
+  useEffect(() => {
+    if (usermetadata) {
+      setStillExecutingUserMetadata(false);
+    }
+  }, [usermetadata]);
+
+  useEffect(() => {
+    executeUserMetadata();
+  }, []);
+
   const value = {
     isAunthenticated,
     usermetadata,
@@ -174,6 +185,7 @@ function AppContextProvider({ children }) {
     addRegisterMetadata,
     clearRegisterMetadata,
     manipulateAlreadyValidated,
+    logout,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
