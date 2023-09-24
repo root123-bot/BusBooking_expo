@@ -39,6 +39,7 @@ import LoginScreen from "./screens/BottomTabs/ProfileStack/Auth/LoginScreen";
 import EnterOTPScreen from "./screens/BottomTabs/ProfileStack/Auth/EnterOTPScreen";
 import SetPinScreen from "./screens/BottomTabs/ProfileStack/Auth/SetPinScreen";
 import ForgotPassword from "./screens/BottomTabs/ProfileStack/Auth/ForgotPassword";
+import PickAvatarScreen from "./screens/BottomTabs/ProfileStack/PickAvatar";
 
 const Stack = createNativeStackNavigator();
 const Stack1 = createStackNavigator();
@@ -139,6 +140,7 @@ function ProfileStack() {
       }}
     >
       <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+      <Stack.Screen name="PickAvatarScreen" component={PickAvatarScreen} />
       {!AppCtx.isAunthenticated && (
         <>
           <Stack.Screen name="Register" component={RegisterScreen} />

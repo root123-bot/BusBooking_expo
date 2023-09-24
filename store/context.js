@@ -1,6 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, useContext, useEffect, useState } from "react";
 import { BASE_URL } from "../constants/domain";
+import { _cacheImages } from "../utils";
+import { fetchAvatars } from "../utils/requests";
 
 export const AppContext = createContext({
   isAunthenticated: false,
@@ -12,6 +14,8 @@ export const AppContext = createContext({
   alreadyValidated: false,
   stillExecutingUserMetadata: true,
   resetPhoneNumber: {},
+  avatars: [],
+  finishedCachingAvatars: false,
   manipulateIsAunthenticated: (value) => {},
   manipulateUserMetadata: (metadata) => {},
   manipulateFavIcon: (icon) => {},
@@ -22,6 +26,8 @@ export const AppContext = createContext({
   manipulateAlreadyValidated: (status) => {},
   manipulateResetPhoneNumber: (metadata) => {},
   logout: () => {},
+  updateAvatars: (avatars) => {},
+  manipulateFinishedCachingAvatars: (status) => {},
 });
 
 function AppContextProvider({ children }) {
@@ -33,7 +39,8 @@ function AppContextProvider({ children }) {
   const [registermetadata, setRegisterMetadata] = useState({});
   const [alreadyValidated, setAlreadyValidated] = useState(false);
   const [resetPhoneNumber, setResetPhoneNumber] = useState({});
-
+  const [avatars, setAvatars] = useState([]);
+  const [finishedCachingAvatars, setFinishedCachingAvatars] = useState(false);
   const [stillExecutingUserMetadata, setStillExecutingUserMetadata] =
     useState(true);
 
@@ -49,6 +56,10 @@ function AppContextProvider({ children }) {
     setLastLoginPhoneNumber(phone_number);
   }
 
+  function updateAvatars(avatars) {
+    setAvatars(avatars);
+  }
+
   function manipulateResetPhoneNumber(metadata) {
     setResetPhoneNumber((prevState) => {
       return {
@@ -56,6 +67,10 @@ function AppContextProvider({ children }) {
         ...metadata,
       };
     });
+  }
+
+  function manipulateFinishedCachingAvatars(status) {
+    setFinishedCachingAvatars(status);
   }
 
   function manipulateAlreadyValidated(status) {
@@ -173,6 +188,24 @@ function AppContextProvider({ children }) {
     }
   }
 
+  async function getAvatars() {
+    try {
+      const data = await fetchAvatars();
+      setAvatars(data);
+    } catch (err) {
+      console.log("Error fetching avatars ", err.message);
+    }
+  }
+
+  useEffect(() => {
+    if (avatars.length > 0) {
+      _cacheImages(avatars, ({ status }) => {
+        console.log("Done caching avatars status: ", status);
+        setFinishedCachingAvatars(true);
+      });
+    }
+  }, [avatars.length]);
+
   useEffect(() => {
     if (usermetadata) {
       setStillExecutingUserMetadata(false);
@@ -181,6 +214,7 @@ function AppContextProvider({ children }) {
 
   useEffect(() => {
     executeUserMetadata();
+    getAvatars();
   }, []);
 
   const value = {
@@ -193,6 +227,8 @@ function AppContextProvider({ children }) {
     alreadyValidated,
     stillExecutingUserMetadata,
     resetPhoneNumber,
+    avatars,
+    finishedCachingAvatars,
     manipulateIsAunthenticated,
     manipulateUserMetadata,
     manipulateFavIcon,
@@ -203,6 +239,8 @@ function AppContextProvider({ children }) {
     manipulateAlreadyValidated,
     logout,
     manipulateResetPhoneNumber,
+    updateAvatars,
+    manipulateFinishedCachingAvatars,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

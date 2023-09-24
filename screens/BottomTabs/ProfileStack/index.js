@@ -10,7 +10,11 @@ import {
   ScrollView,
 } from "react-native";
 import { AppContext } from "../../../store/context";
-import { Background, LoadingSpinner } from "../../../components/ui";
+import {
+  Background,
+  CustomImageCache,
+  LoadingSpinner,
+} from "../../../components/ui";
 import { COLORS } from "../../../constants/colors";
 import { Modal, Button } from "react-native-paper";
 import { BASE_URL } from "../../../constants/domain";
@@ -50,26 +54,16 @@ function ProfileScreen({ navigation, route }) {
               <ScrollView style={[styles.childContainer]}>
                 <TouchableOpacity
                   onPress={() => {
-                    setDisplayDialogue(true);
+                    navigation.navigate("PickAvatarScreen");
                   }}
                 >
                   <View style={styles.innerContainer}>
-                    <ImageCache.Image
-                      tint="light"
-                      transitionDuration={300}
-                      style={[
-                        styles.iconimg,
-                        AppCtx.usermetadata.get_avatar && {
-                          width: 190,
-                          height: 190,
-                          borderRadius: 190 / 2,
-                        },
-                      ]}
-                      {...{
-                        preview: {
-                          uri: `${BASE_URL}${AppCtx.usermetadata.get_avatar}`,
-                        },
-                        uri: `${BASE_URL}${AppCtx.usermetadata.get_avatar}`,
+                    <CustomImageCache
+                      uri={AppCtx.usermetadata.get_avatar}
+                      style={{
+                        width: 190,
+                        height: 190,
+                        borderRadius: 190 / 2,
                       }}
                     />
                   </View>

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import {
   View,
   ActivityIndicator,
@@ -6,6 +6,7 @@ import {
   ImageBackground,
   StyleSheet,
   Text,
+  Image,
   useContext,
 } from "react-native";
 import AnimatedLottieView from "lottie-react-native";
@@ -13,6 +14,8 @@ import { Searchbar } from "react-native-paper";
 import { COLORS } from "../constants/colors";
 import { AppContext } from "../store/context";
 import { LinearGradient } from "expo-linear-gradient";
+import * as FileSystem from "expo-file-system";
+import * as ImageCache from "react-native-expo-image-cache";
 
 export const LoadingSpinner = ({ color }) => {
   return (
@@ -105,6 +108,58 @@ export const Background = ({ children, image, style }) => {
           {children}
         </ImageBackground>
       </LinearGradient>
+    </>
+  );
+};
+
+export const CustomImageCache = ({ uri, style }) => {
+  const [imageUrl, setImageUrl] = useState(null);
+
+  useEffect(() => {
+    const getCacheImage = async () => {
+      const path = `${FileSystem.cacheDirectory}${uri}`;
+      const resource = await FileSystem.getInfoAsync(path);
+      if (resource.exists) {
+        setImageUrl(resource.uri);
+      } else {
+        try {
+          const newResource = await FileSystem.downloadAsync(
+            `${BASE_URL}${uri}`,
+            path
+          );
+          setImageUrl(newResource.uri);
+        } catch (error) {
+          console.log("error ", error);
+          setImageUrl(`${BASE_URL}${uri}`);
+        }
+      }
+    };
+    getCacheImage();
+  });
+
+  return (
+    <>
+      {imageUrl ? (
+        <Image
+          style={style}
+          source={{
+            uri: imageUrl,
+          }}
+        />
+      ) : (
+        <View
+          style={[
+            style,
+            {
+              backgroundColor: COLORS.darkprimary,
+              justifyContent: "center",
+              alignItems: "center",
+            },
+          ]}
+        >
+          <ActivityIndicator size={"large"} />
+        </View>
+      )}
     </>
   );
 };
