@@ -193,3 +193,25 @@ export const fetchAvatars = async () => {
     .then((data) => Promise.resolve(data))
     .catch((error) => Promise.reject(error));
 };
+
+export const UpdateAvatar = async (user_id, avatar_id) => {
+  return fetch(`${BASE_URL}/api/updateavatar/`, {
+    method: "POST",
+    body: JSON.stringify({
+      user_id,
+      avatar_id,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        console.log("ERROR IN UPDATING THE AVATAR IMAGE");
+      }
+    })
+    .then((data) => Promise.resolve(data))
+    .catch((error) => Promise.reject(error));
+};

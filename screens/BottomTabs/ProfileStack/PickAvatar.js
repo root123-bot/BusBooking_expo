@@ -7,9 +7,22 @@ import * as RNPaper from "react-native-paper";
 import { ScrollView } from "react-native-gesture-handler";
 import { AppContext } from "../../../store/context";
 import { CustomImageCache } from "../../../components/ui";
+import { UpdateAvatar } from "../../../utils/requests";
 
 function PickAvatarScreen({ navigation }) {
   const AppCtx = useContext(AppContext);
+
+  const saveAvatarHandler = () => {
+    AppCtx.manipulateUserMetadata({
+      ...AppCtx.usermetadata,
+      get_avatar: selectedAvatar.get_image,
+    });
+
+    navigation.navigate("ProfileScreen");
+
+    // lets now upload image to the backend
+    UpdateAvatar(AppCtx.usermetadata.get_user_id, selectedAvatar.id);
+  };
 
   const [selectedAvatar, setSelectedAvatar] = useState(null);
   return (
@@ -96,7 +109,7 @@ function PickAvatarScreen({ navigation }) {
                     alignItems: "flex-end",
                   }}
                 >
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={saveAvatarHandler}>
                     <RNPaper.Text style={styles.save}>Save</RNPaper.Text>
                   </TouchableOpacity>
                 </View>
