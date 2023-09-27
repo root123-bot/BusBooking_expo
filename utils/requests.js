@@ -181,6 +181,19 @@ export const isUserExist = async (phone_number) => {
     });
 };
 
+export const fetchTrips = async () => {
+  return fetch(`${BASE_URL}/api/alltrips/`)
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw new Error("Server error");
+      }
+    })
+    .then((data) => Promise.resolve(data))
+    .catch((error) => Promise.reject(error));
+};
+
 export const fetchAvatars = async () => {
   return fetch(`${BASE_URL}/api/avatars/`)
     .then((response) => {

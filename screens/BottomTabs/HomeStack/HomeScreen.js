@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -21,6 +21,10 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
 import { CustomLine } from "../../../components/ui";
 import * as RNPaper from "react-native-paper";
+import { AppContext } from "../../../store/context";
+import { LoadingSpinner } from "../../../components/ui";
+import { TransparentPopUpIconMessage } from "../../../components/Messages";
+
 const { height } = Dimensions.get("window");
 
 function RouterCard() {
@@ -130,21 +134,116 @@ function RouterCard() {
   );
 }
 
+function getDayName(day) {
+  let dayname;
+  switch (day) {
+    case 0:
+      dayname = "Sunday";
+      break;
+    case 1:
+      dayname = "Monday";
+      break;
+    case 2:
+      dayname = "Tuesday";
+      break;
+    case 3:
+      dayname = "Wednesday";
+      break;
+    case 4:
+      dayname = "Thursday";
+      break;
+    case 5:
+      dayname = "Friday";
+      break;
+    case 6:
+      dayname = "Saturday";
+      break;
+    default:
+      break;
+  }
+
+  return dayname;
+}
+
 function HomeScreen({ navigation }) {
-  const [from, setFrom] = useState("Dar es salaam");
+  const AppCtx = useContext(AppContext);
+
+  const [from, setFrom] = useState(
+    Array.from(new Set(AppCtx.trips.map((trip) => trip.bus_source))).length
+      ? Array.from(new Set(AppCtx.trips.map((trip) => trip.bus_source)))[0]
+      : "NO DATA"
+  );
   const [fromIcon, setFromIcon] = useState("chevron-down");
   const [toggleFromIcon, setToggleFromIcon] = useState("none");
-  const [destination, setDestination] = useState("Kahama");
+  const [destination, setDestination] = useState(
+    Array.from(new Set(AppCtx.trips.map((trip) => trip.bus_destination)))
+      .length > 0
+      ? Array.from(new Set(AppCtx.trips.map((trip) => trip.bus_destination)))[0]
+      : "NO DATA"
+  );
   const [destinationIcon, setDestinationIcon] = useState("chevron-down");
   const [toggleDestinationIcon, setToggleDestinationIcon] = useState("none");
   const [passengers, setPassengers] = useState("1");
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
-  // const [show, setShow] = useState(false);
+  const [fromList, setFromList] = useState(
+    Array.from(new Set(AppCtx.trips.map((trip) => trip.bus_source)))
+  );
+  const [destinationList, setDestinationList] = useState(
+    Array.from(new Set(AppCtx.trips.map((trip) => trip.bus_destination)))
+  );
   const [departureDate, setDepartureDate] = useState(new Date());
+  const [showAnimation, setShowAnimation] = useState(false);
+  const [formSubmitLoader, setFormSubmitLoader] = useState(false);
+  const [message, setMessage] = useState("");
+  const [icon, setIcon] = useState("");
 
   const toggleDatePicker = () => {
     setShowPicker(!showPicker);
+  };
+
+  console.log("Departure time ", departureDate);
+
+  const executeCoreLogics = () => {
+    // initially lets filter destinations depending on the "from"
+    const source = Array.from(
+      new Set(AppCtx.trips.map((trip) => trip.bus_source))
+    ).length
+      ? Array.from(new Set(AppCtx.trips.map((trip) => trip.bus_source)))[0]
+      : "NO DATA";
+
+    const result = Array.from(
+      new Set(
+        AppCtx.trips
+          .filter((trip) => trip.bus_source === source)
+          .map((data) => data.bus_destination)
+      )
+    );
+
+    setDestinationList(result);
+    setDestination(result.length > 0 ? result[0] : "Choose destination");
+  };
+
+  // at first we should also have the destination depended on the
+  // default value of "From" used, you should notice that
+  const onChangeFrom = (source) => {
+    // we should yield the "Destination" according to "from" and day of departure
+    // i think its okay to include also the "departure date" but you should
+    // notice that the "depart date" is the condition which is below so there
+    // is no need to include 'departure' date to our looking since it will be
+    // difficult to have logics for some scenarios so lets end with from only...
+    console.log("Source ", source);
+    setFrom(source);
+    const result = Array.from(
+      new Set(
+        AppCtx.trips
+          .filter((trip) => trip.bus_source === source)
+          .map((data) => data.bus_destination)
+      )
+    );
+    console.log("New destinations ", result);
+    setDestinationList(result);
+    setDestination(result.length > 0 ? result[0] : "Choose destination");
   };
 
   const onChange = ({ type }, selectedDate) => {
@@ -175,6 +274,67 @@ function HomeScreen({ navigation }) {
     showMode("time");
   };
 
+  const searchTripHandler = () => {
+    // make sure passenger is not more than 3
+    if (+passengers > 3) {
+      alert("Passengers should not be more than 3");
+      return;
+    }
+
+    setFormSubmitLoader(true);
+    setShowAnimation(true);
+
+    // take from, then destination, then date(day) and passenger
+    const day = getDayName(new Date(departureDate).getDay());
+    console.log("Day ", day);
+    const result = AppCtx.trips.filter((trip) =>
+      trip.bus_source === from &&
+      trip.bus_destination === destination &&
+      trip.day.toLowerCase() === day.toLowerCase() &&
+      trip.bus_info.bookings_metadata.length === 0
+        ? true
+        : trip.bus_info.bookings_metadata.filter(
+            (value) =>
+              getDayName(new Date(value.trip_date).getDay()) ===
+                day.toLowerCase() && +value.available_seats >= +passengers
+          ).length > 0
+    );
+    console.log("Result ", result);
+
+    if (result.length === 0) {
+      setIcon("error-outline");
+      setMessage("No trip found");
+      setTimeout(() => {
+        setShowAnimation(false);
+        setTimeout(() => {
+          setFormSubmitLoader(false);
+        }, 1500);
+      }, 1500);
+      return;
+    }
+
+    // if we are here then we have a trip
+    setIcon("check-circle-outline");
+    setMessage("Trips found");
+    setTimeout(() => {
+      setShowAnimation(false);
+      setTimeout(() => {
+        setFormSubmitLoader(false);
+        navigation.navigate("RouteSearchDetails", {
+          trips: result,
+        });
+      }, 500);
+    }, 500);
+  };
+
+  useEffect(() => {
+    executeCoreLogics();
+  }, []);
+
+  if (AppCtx.stillFetchingTrips || AppCtx.stillFetchingAvatars) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <>
       <StatusBar style="light" />
@@ -187,6 +347,26 @@ function HomeScreen({ navigation }) {
       >
         <View
           style={{
+            display: formSubmitLoader ? "flex" : "none",
+            position: "absolute",
+            top: "40%",
+            zIndex: 10000000000,
+            alignSelf: "center",
+            width: 150,
+            height: 150,
+            justifyContent: "center",
+          }}
+        >
+          <TransparentPopUpIconMessage
+            messageHeader={message}
+            icon={icon}
+            inProcess={showAnimation}
+          />
+        </View>
+
+        <View
+          pointerEvents={formSubmitLoader ? "none" : "auto"}
+          style={{
             position: "absolute",
             top: 0,
             left: 0,
@@ -195,7 +375,10 @@ function HomeScreen({ navigation }) {
             backgroundColor: COLORS.darkprimary,
           }}
         ></View>
-        <ScrollView style={{ flex: 1 }}>
+        <ScrollView
+          style={{ flex: 1 }}
+          pointerEvents={formSubmitLoader ? "none" : "auto"}
+        >
           <View
             style={{
               width: "85%",
@@ -264,20 +447,21 @@ function HomeScreen({ navigation }) {
                       <Picker
                         mode="dropdown"
                         selectedValue={from}
-                        onValueChange={(text) => setFrom(text)}
+                        onValueChange={onChangeFrom}
                         style={[
                           styles.pickerStyling,
                           { display: toggleFromIcon },
                         ]}
                       >
-                        <Picker.Item
-                          label="Dar es salaam"
-                          value="Dar es salaam"
-                        />
-                        <Picker.Item label="Mtwara" value="Mtwara" />
-                        <Picker.Item label="Songea" value="Songea" />
-                        <Picker.Item label="Iringa" value="Iringa" />
-                        <Picker.Item label="Mwanza" value="Mwanza" />
+                        {fromList.map((item, index) => {
+                          return (
+                            <Picker.Item
+                              key={index}
+                              label={item}
+                              value={item}
+                            />
+                          );
+                        })}
                       </Picker>
                     </>
                   ) : (
@@ -299,18 +483,36 @@ function HomeScreen({ navigation }) {
                             selectedValue={from}
                             onValueChange={(text) => setFrom(text)}
                           >
-                            <Picker.Item
-                              label="Dar es salaam"
-                              value="Dar es salaam"
-                            />
-                            <Picker.Item label="Mtwara" value="Mtwara" />
-                            <Picker.Item label="Songea" value="Songea" />
-                            <Picker.Item label="Iringa" value="Iringa" />
-                            <Picker.Item label="Mwanza" value="Mwanza" />
+                            {fromList.map((item, index) => {
+                              return (
+                                <Picker.Item
+                                  key={index}
+                                  label={item}
+                                  value={item}
+                                />
+                              );
+                            })}
                           </Picker>
                         </View>
                       </View>
                     </>
+                  )}
+                  {Platform.OS === "ios" && toggleFromIcon === "flex" && (
+                    <Button
+                      onPress={() => {
+                        setToggleFromIcon("none");
+                        setFromIcon("chevron-down");
+                      }}
+                      style={{
+                        backgroundColor: "grey",
+                      }}
+                      labelStyle={{
+                        fontFamily: "montserrat-17",
+                        color: "white",
+                      }}
+                    >
+                      Done
+                    </Button>
                   )}
                 </View>
                 <View style={styles.formInput}>
@@ -350,14 +552,15 @@ function HomeScreen({ navigation }) {
                           { display: toggleDestinationIcon },
                         ]}
                       >
-                        <Picker.Item
-                          label="Dar es salaam"
-                          value="Dar es salaam"
-                        />
-                        <Picker.Item label="Mtwara" value="Mtwara" />
-                        <Picker.Item label="Songea" value="Songea" />
-                        <Picker.Item label="Iringa" value="Iringa" />
-                        <Picker.Item label="Mwanza" value="Mwanza" />
+                        {destinationList.map((item, index) => {
+                          return (
+                            <Picker.Item
+                              key={index}
+                              label={item}
+                              value={item}
+                            />
+                          );
+                        })}
                       </Picker>
                     </>
                   ) : (
@@ -379,19 +582,38 @@ function HomeScreen({ navigation }) {
                             selectedValue={destination}
                             onValueChange={(text) => setDestination(text)}
                           >
-                            <Picker.Item
-                              label="Dar es salaam"
-                              value="Dar es salaam"
-                            />
-                            <Picker.Item label="Mtwara" value="Mtwara" />
-                            <Picker.Item label="Songea" value="Songea" />
-                            <Picker.Item label="Iringa" value="Iringa" />
-                            <Picker.Item label="Mwanza" value="Mwanza" />
+                            {destinationList.map((item, index) => {
+                              return (
+                                <Picker.Item
+                                  key={index}
+                                  label={item}
+                                  value={item}
+                                />
+                              );
+                            })}
                           </Picker>
                         </View>
                       </View>
                     </>
                   )}
+                  {Platform.OS === "ios" &&
+                    toggleDestinationIcon === "flex" && (
+                      <Button
+                        onPress={() => {
+                          setToggleDestinationIcon("none");
+                          setDestinationIcon("chevron-down");
+                        }}
+                        style={{
+                          backgroundColor: "grey",
+                        }}
+                        labelStyle={{
+                          fontFamily: "montserrat-17",
+                          color: "white",
+                        }}
+                      >
+                        Done
+                      </Button>
+                    )}
                 </View>
                 <View style={styles.formInput}>
                   <Pressable onPress={toggleDatePicker}>
@@ -442,6 +664,16 @@ function HomeScreen({ navigation }) {
                     label={"Passengers"}
                     activeOutlineColor="black"
                   />
+                  <RNPaper.HelperText
+                    padding="none"
+                    style={{
+                      fontWeight: "bold",
+                      color: COLORS.secondary,
+                      fontStyle: "italic",
+                    }}
+                  >
+                    ** Enter maximum 3 passengers
+                  </RNPaper.HelperText>
                 </View>
               </View>
               <View
@@ -455,7 +687,8 @@ function HomeScreen({ navigation }) {
                     backgroundColor: COLORS.darkprimary,
                     borderRadius: 25,
                   }}
-                  onPress={() => navigation.navigate("RouteSearchDetails")}
+                  // onPress={() => navigation.navigate("RouteSearchDetails")}
+                  onPress={searchTripHandler}
                 >
                   Search
                 </Button>

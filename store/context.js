@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, useContext, useEffect, useState } from "react";
 import { BASE_URL } from "../constants/domain";
 import { _cacheImages } from "../utils";
-import { fetchAvatars } from "../utils/requests";
+import { fetchAvatars, fetchTrips } from "../utils/requests";
 
 export const AppContext = createContext({
   isAunthenticated: false,
@@ -16,6 +16,9 @@ export const AppContext = createContext({
   resetPhoneNumber: {},
   avatars: [],
   finishedCachingAvatars: false,
+  trips: [],
+  stillFetchingTrips: true,
+  stillFetchingAvatars: true,
   manipulateIsAunthenticated: (value) => {},
   manipulateUserMetadata: (metadata) => {},
   manipulateFavIcon: (icon) => {},
@@ -27,7 +30,10 @@ export const AppContext = createContext({
   manipulateResetPhoneNumber: (metadata) => {},
   logout: () => {},
   updateAvatars: (avatars) => {},
+  updateTrips: (trips) => {},
   manipulateFinishedCachingAvatars: (status) => {},
+  manipulateStillFetchingTrips: (status) => {},
+  manipulateStillFetchingAvatars: (status) => {},
 });
 
 function AppContextProvider({ children }) {
@@ -43,7 +49,9 @@ function AppContextProvider({ children }) {
   const [finishedCachingAvatars, setFinishedCachingAvatars] = useState(false);
   const [stillExecutingUserMetadata, setStillExecutingUserMetadata] =
     useState(true);
-
+  const [trips, setTrips] = useState([]);
+  const [stillFetchingTrips, setStillFetchingTrips] = useState(true);
+  const [stillFetchingAvatars, setStillFetchingAvatars] = useState(true);
   const manipulateIsAunthenticated = (value) => {
     setIsAunthenticated(value);
   };
@@ -54,6 +62,18 @@ function AppContextProvider({ children }) {
 
   function manipulateLastLoginPhoneNumber(phone_number) {
     setLastLoginPhoneNumber(phone_number);
+  }
+
+  function updateTrips(trips) {
+    setTrips(trips);
+  }
+
+  function manipulateStillFetchingTrips(status) {
+    setStillFetchingTrips(status);
+  }
+
+  function manipulateStillFetchingAvatars(status) {
+    setStillFetchingAvatars(status);
   }
 
   function updateAvatars(avatars) {
@@ -188,12 +208,33 @@ function AppContextProvider({ children }) {
     }
   }
 
+  // Avatars is not our main concert so no need to avoid app being displayed
+  // if the avatars didn't get loaded, its okay with trip and usermetadata to
+  // have loading spinner until it full executed successful, but i think for
+  // good user experience we should also have the loading for these avatars...
+  // ITS OKAY TO HAVE THE LOADING FOR AVATARS
   async function getAvatars() {
     try {
       const data = await fetchAvatars();
       setAvatars(data);
+      setStillFetchingAvatars(false);
     } catch (err) {
       console.log("Error fetching avatars ", err.message);
+      alert(err.message);
+      // its okay to continue showing spinner if there is problem
+    }
+  }
+
+  async function getTrips() {
+    try {
+      const data = await fetchTrips();
+      console.log("fetched data ", data);
+      setTrips(data);
+      setStillFetchingTrips(false);
+    } catch (err) {
+      console.log("Error fetching trips ", err.message);
+      alert(err.message);
+      // its okay to continue showing spinner if there is problem
     }
   }
 
@@ -215,6 +256,7 @@ function AppContextProvider({ children }) {
   useEffect(() => {
     executeUserMetadata();
     getAvatars();
+    getTrips();
   }, []);
 
   const value = {
@@ -228,7 +270,10 @@ function AppContextProvider({ children }) {
     stillExecutingUserMetadata,
     resetPhoneNumber,
     avatars,
+    trips,
     finishedCachingAvatars,
+    stillFetchingTrips,
+    stillFetchingAvatars,
     manipulateIsAunthenticated,
     manipulateUserMetadata,
     manipulateFavIcon,
@@ -241,6 +286,9 @@ function AppContextProvider({ children }) {
     manipulateResetPhoneNumber,
     updateAvatars,
     manipulateFinishedCachingAvatars,
+    updateTrips,
+    manipulateStillFetchingTrips,
+    manipulateStillFetchingAvatars,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
