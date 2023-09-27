@@ -134,40 +134,42 @@ function TransparentBackgroundButton({ title, subtitle, icon, color }) {
         </TouchableOpacity>
         <CustomLine color={"grey"} style={styles.customLine} />
         {Platform.OS === "ios" && (
-          <TouchableOpacity
-            onPress={() => {
-              Alert.alert(
-                "Are you sure?",
-                "Are you sure you want to delete account, the process is irreversible.",
-                [
-                  {
-                    text: "Cancel",
-                    onPress: () => {
-                      console.log("Hello world");
+          <>
+            <TouchableOpacity
+              onPress={() => {
+                Alert.alert(
+                  "Are you sure?",
+                  "Are you sure you want to delete account, the process is irreversible.",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => {
+                        console.log("Hello world");
+                      },
                     },
-                  },
-                  {
-                    text: "Delete",
-                    style: "destructive",
-                    onPress: () => {
-                      // deleteAccountHandler();
+                    {
+                      text: "Delete",
+                      style: "destructive",
+                      onPress: () => {
+                        // deleteAccountHandler();
+                      },
                     },
-                  },
-                ]
-              );
-            }}
-          >
-            <View style={styles.itemContainer}>
-              <View style={styles.iconHolder}>
-                <MaterialIcons name="delete" size={30} color={"red"} />
+                  ]
+                );
+              }}
+            >
+              <View style={styles.itemContainer}>
+                <View style={styles.iconHolder}>
+                  <MaterialIcons name="delete" size={30} color={"red"} />
+                </View>
+                <View>
+                  <Text style={[styles.title, { color: "red" }]}>
+                    Delete Account
+                  </Text>
+                </View>
               </View>
-              <View>
-                <Text style={[styles.title, { color: "red" }]}>
-                  Delete Account
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </>
         )}
       </View>
     </View>
