@@ -287,9 +287,12 @@ function HomeScreen({ navigation }) {
     // take from, then destination, then date(day) and passenger
     const day = getDayName(new Date(departureDate).getDay());
     console.log("Day ", day);
+    AppCtx.trips.forEach((trip) => {
+      console.log("Trip ", trip.bus_info.bookings_metadata);
+    });
     const result = AppCtx.trips.filter((trip) =>
-      trip.bus_source === from &&
-      trip.bus_destination === destination &&
+      trip.bus_source.toLowerCase() === from.toLowerCase() &&
+      trip.bus_destination.toLowerCase() === destination.toLowerCase() &&
       trip.day.toLowerCase() === day.toLowerCase() &&
       trip.bus_info.bookings_metadata.length === 0
         ? true
@@ -299,7 +302,7 @@ function HomeScreen({ navigation }) {
                 day.toLowerCase() && +value.available_seats >= +passengers
           ).length > 0
     );
-    console.log("Result ", result);
+    console.log("Result ", result[0].bus_info.bookings_metadata);
 
     if (result.length === 0) {
       setIcon("error-outline");
