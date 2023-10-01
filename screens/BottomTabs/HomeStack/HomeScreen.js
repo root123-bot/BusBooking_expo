@@ -202,7 +202,7 @@ function HomeScreen({ navigation }) {
     setShowPicker(!showPicker);
   };
 
-  console.log("Departure time ", departureDate);
+  // console.log("Departure time ", departureDate);
 
   const executeCoreLogics = () => {
     // initially lets filter destinations depending on the "from"
@@ -286,23 +286,26 @@ function HomeScreen({ navigation }) {
 
     // take from, then destination, then date(day) and passenger
     const day = getDayName(new Date(departureDate).getDay());
-    console.log("Day ", day);
-    AppCtx.trips.forEach((trip) => {
-      console.log("Trip ", trip.bus_info.bookings_metadata);
-    });
-    const result = AppCtx.trips.filter((trip) =>
-      trip.bus_source.toLowerCase() === from.toLowerCase() &&
-      trip.bus_destination.toLowerCase() === destination.toLowerCase() &&
-      trip.day.toLowerCase() === day.toLowerCase() &&
-      trip.bus_info.bookings_metadata.length === 0
-        ? true
-        : trip.bus_info.bookings_metadata.filter(
-            (value) =>
-              getDayName(new Date(value.trip_date).getDay()) ===
-                day.toLowerCase() && +value.available_seats >= +passengers
-          ).length > 0
-    );
-    console.log("Result ", result[0].bus_info.bookings_metadata);
+
+    const result = AppCtx.trips
+      .filter(
+        (trip) =>
+          trip.bus_source.toLowerCase() === from.toLowerCase() &&
+          trip.bus_destination.toLowerCase() === destination.toLowerCase() &&
+          trip.day.toLowerCase() === day.toLowerCase()
+      )
+      .filter((trip) =>
+        trip.day.toLowerCase() === day.toLowerCase() &&
+        trip.bus_info.bookings_metadata.length === 0
+          ? true
+          : trip.bus_info.bookings_metadata.filter(
+              (value) =>
+                getDayName(new Date(value.trip_date).getDay()).toLowerCase() ===
+                  day.toLowerCase() && +value.available_seats >= +passengers
+            ).length > 0
+      );
+    console.log("TARGETTED TRIPS ", result.length);
+    console.log("ACTUAL DATA ", result);
 
     if (result.length === 0) {
       setIcon("error-outline");
@@ -690,7 +693,6 @@ function HomeScreen({ navigation }) {
                     backgroundColor: COLORS.darkprimary,
                     borderRadius: 25,
                   }}
-                  // onPress={() => navigation.navigate("RouteSearchDetails")}
                   onPress={searchTripHandler}
                 >
                   Search
