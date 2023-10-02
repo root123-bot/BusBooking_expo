@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useContext } from "react";
 import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { COLORS } from "../../../constants/colors";
@@ -7,8 +7,17 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { TextInput } from "react-native-paper";
 import RouteCard from "../../../components/RouteCard";
+import { AppContext } from "../../../store/context";
+
+/*
+  POINT OF NOTE: there is no way tukawa na duplicates in our trips coz each trip is unique and it can contains 
+  duplicates of "bookings" but the bookings are inner array found in it so here we resolve the all trips from 
+  our api so there is no way to have filtered trips and be the same
+*/
 
 function DetailsScreen({ navigation }) {
+  const AppCtx = useContext(AppContext);
+
   return (
     <>
       <StatusBar style="light" />
@@ -81,7 +90,7 @@ function DetailsScreen({ navigation }) {
                         }}
                         numberOfLines={1}
                       >
-                        Dar es salaam
+                        {AppCtx.userTripMetadata.from}
                       </Text>
                     </View>
                     <View
@@ -113,7 +122,7 @@ function DetailsScreen({ navigation }) {
                           }}
                           numberOfLines={1}
                         >
-                          Mombasa
+                          {AppCtx.userTripMetadata.destination}
                         </Text>
                       </View>
                     </View>
@@ -130,7 +139,7 @@ function DetailsScreen({ navigation }) {
                         fontSize: 12,
                         fontFamily: "overpass-reg",
                       }}
-                    >{`${new Date().toDateString()}`}</Text>
+                    >{`${AppCtx.userTripMetadata.departureDate.toDateString()}`}</Text>
                   </View>
                 </View>
                 <View
@@ -152,140 +161,9 @@ function DetailsScreen({ navigation }) {
             paddingVertical: 20,
           }}
         >
-          {/* <View
-            style={{
-              width: "90%",
-              marginLeft: "auto",
-              marginRight: "auto",
-              marginTop: "2%",
-              marginBottom: "5%",
-            }}
-          >
-            <View
-              style={{
-                backgroundColor: COLORS.light,
-                borderRadius: 15,
-                padding: 13,
-                shadowColor: "black",
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
-                },
-                elevation: 5,
-                shadowOpacity: 0.5,
-                shadowRadius: 3.84,
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontFamily: "overpass-reg",
-                  }}
-                >
-                  Hiace #109
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontFamily: "overpass-reg",
-                    color: COLORS.darkprimary,
-                  }}
-                >
-                  09:30 PM
-                </Text>
-              </View>
-              <View
-                style={{
-                  marginTop: 10,
-                  flexDirection: "row",
-                  // justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <View
-                  style={{
-                    width: "35%",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontFamily: "montserrat-17",
-                      fontSize: 17,
-                    }}
-                    numberOfLines={1}
-                  >
-                    Dar es salaam
-                  </Text>
-                </View>
-
-                <Image
-                  source={require("../../../assets/images/icons/right-arrow.png")}
-                  style={{
-                    width: "30%",
-                    height: 20,
-                  }}
-                />
-                <View
-                  style={{
-                    width: "35%",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontFamily: "montserrat-17",
-                      fontSize: 17,
-                      textAlign: "right",
-                    }}
-                    numberOfLines={1}
-                  >
-                    Mombasa
-                  </Text>
-                </View>
-              </View>
-              <View
-                style={{
-                  marginTop: 10,
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <TextInput
-                  mode="outlined"
-                  // disabled={true}
-                  editable={false}
-                  left={<TextInput.Icon icon="clock-fast" />}
-                  value={"08:30 PM"}
-                  style={{
-                    width: "48%",
-                  }}
-                  label={"Arrival Time"}
-                />
-                <TextInput
-                  mode="outlined"
-                  editable={false}
-                  left={<TextInput.Icon icon="clock-fast" />}
-                  onChangeText={(text) => setPassengers(text)}
-                  value={"09:30 PM"}
-                  label={"Departure Time"}
-                  style={{
-                    width: "48%",
-                  }}
-                  activeOutlineColor="black"
-                />
-              </View>
-            </View>
-          </View> */}
-          <RouteCard />
-          <RouteCard />
-          <RouteCard />
-          <RouteCard />
+          {AppCtx.userTripMetadata.founded_trips.map((value, index) => (
+            <RouteCard key={index} metadata={value} />
+          ))}
         </ScrollView>
       </View>
     </>

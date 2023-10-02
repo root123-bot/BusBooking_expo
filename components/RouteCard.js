@@ -4,7 +4,7 @@ import { TextInput } from "react-native-paper";
 import { COLORS } from "../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 
-function RouteCard() {
+function RouteCard({ metadata }) {
   const navigation = useNavigation();
   return (
     <Pressable
@@ -49,7 +49,7 @@ function RouteCard() {
               fontFamily: "overpass-reg",
             }}
           >
-            Hiace #109
+            {metadata.bus_info.bus_name}
           </Text>
           {/* <Text
             style={{

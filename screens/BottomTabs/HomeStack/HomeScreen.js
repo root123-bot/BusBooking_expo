@@ -287,6 +287,20 @@ function HomeScreen({ navigation }) {
     // take from, then destination, then date(day) and passenger
     const day = getDayName(new Date(departureDate).getDay());
 
+    console.log(
+      "CHECKING RETURNED BOOKINGS ",
+      AppCtx.trips[0].bus_info.bookings_metadata
+    );
+    // console.log(
+    //   "Booked one ",
+    //   AppCtx.trips.filter(
+    //     (trip) =>
+    //       trip.bus_source.toLowerCase() === from.toLowerCase() &&
+    //       trip.bus_destination.toLowerCase() === destination.toLowerCase() &&
+    //       trip.day.toLowerCase() === day.toLowerCase()
+    //   ).length
+    // );
+
     const result = AppCtx.trips
       .filter(
         (trip) =>
@@ -304,8 +318,16 @@ function HomeScreen({ navigation }) {
                   day.toLowerCase() && +value.available_seats >= +passengers
             ).length > 0
       );
-    console.log("TARGETTED TRIPS ", result.length);
-    console.log("ACTUAL DATA ", result);
+
+    /*
+  POINT OF NOTE: there is no way tukawa na duplicates in our trips coz each trip is unique and it can contains 
+  duplicates of "bookings" but the bookings are inner array found in it so here we resolve the all trips from 
+  our api so there is no way to have filtered trips and be the same, and if we have the same trip of the same 
+  bus then it will be of different time then no need to have logic to remove duplicates, THANK YOU GOD! 
+*/
+    console.log("RESULTS ", result);
+    console.log("ACTUAL DATA ", result[0].bus_info.bookings_metadata);
+    console.log("SECOND ONE ", result[1].bus_info.bookings_metadata);
 
     if (result.length === 0) {
       setIcon("error-outline");
@@ -322,6 +344,14 @@ function HomeScreen({ navigation }) {
     // if we are here then we have a trip
     setIcon("check-circle-outline");
     setMessage("Trips found");
+    const metadata = {
+      from,
+      destination,
+      passengers,
+      departureDate,
+      founded_trips: result,
+    };
+    AppCtx.updateUserTripMetadata(metadata);
     setTimeout(() => {
       setShowAnimation(false);
       setTimeout(() => {

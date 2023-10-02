@@ -21,7 +21,7 @@ export const _cacheResourcesAsync = async () => {
 
 // Lets cache these images, in my case im trying to cache avatars
 export const _cacheImages = (images, cb) => {
-  console.log("images ", images);
+  // console.log("images ", images);
   images.forEach(async (image, index) => {
     const path = `${FileSystem.cacheDirectory}${image.get_image}`;
     let resource;

@@ -19,6 +19,7 @@ export const AppContext = createContext({
   trips: [],
   stillFetchingTrips: true,
   stillFetchingAvatars: true,
+  userTripMetadata: null,
   manipulateIsAunthenticated: (value) => {},
   manipulateUserMetadata: (metadata) => {},
   manipulateFavIcon: (icon) => {},
@@ -34,6 +35,7 @@ export const AppContext = createContext({
   manipulateFinishedCachingAvatars: (status) => {},
   manipulateStillFetchingTrips: (status) => {},
   manipulateStillFetchingAvatars: (status) => {},
+  updateUserTripMetadata: (metadata) => {},
 });
 
 function AppContextProvider({ children }) {
@@ -50,6 +52,7 @@ function AppContextProvider({ children }) {
   const [stillExecutingUserMetadata, setStillExecutingUserMetadata] =
     useState(true);
   const [trips, setTrips] = useState([]);
+  const [userTripMetadata, setUserTripMetadata] = useState(null);
   const [stillFetchingTrips, setStillFetchingTrips] = useState(true);
   const [stillFetchingAvatars, setStillFetchingAvatars] = useState(true);
   const manipulateIsAunthenticated = (value) => {
@@ -78,6 +81,10 @@ function AppContextProvider({ children }) {
 
   function updateAvatars(avatars) {
     setAvatars(avatars);
+  }
+
+  function updateUserTripMetadata(metadata) {
+    setUserTripMetadata(metadata);
   }
 
   function manipulateResetPhoneNumber(metadata) {
@@ -121,6 +128,7 @@ function AppContextProvider({ children }) {
     setUserMetadata({});
     setStillExecutingUserMetadata(true);
     setResetPhoneNumber({});
+    setUserTripMetadata(null);
     AsyncStorage.removeItem("user_id");
   }
 
@@ -228,7 +236,7 @@ function AppContextProvider({ children }) {
   async function getTrips() {
     try {
       const data = await fetchTrips();
-      console.log("fetched data ", data);
+      // console.log("fetched data ", data);
       setTrips(data);
       setStillFetchingTrips(false);
     } catch (err) {
@@ -274,6 +282,7 @@ function AppContextProvider({ children }) {
     finishedCachingAvatars,
     stillFetchingTrips,
     stillFetchingAvatars,
+    userTripMetadata,
     manipulateIsAunthenticated,
     manipulateUserMetadata,
     manipulateFavIcon,
@@ -289,6 +298,7 @@ function AppContextProvider({ children }) {
     updateTrips,
     manipulateStillFetchingTrips,
     manipulateStillFetchingAvatars,
+    updateUserTripMetadata,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
