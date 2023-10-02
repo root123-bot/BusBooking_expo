@@ -341,6 +341,9 @@ function HomeScreen({ navigation }) {
       return;
     }
 
+    // lets re-arrange our we filtered by price from low to high
+    const rearranged = [...result].sort((a, b) => a.bus_fare - b.bus_fare);
+
     // if we are here then we have a trip
     setIcon("check-circle-outline");
     setMessage("Trips found");
@@ -349,7 +352,7 @@ function HomeScreen({ navigation }) {
       destination,
       passengers,
       departureDate,
-      founded_trips: result,
+      founded_trips: rearranged,
     };
     AppCtx.updateUserTripMetadata(metadata);
     setTimeout(() => {
@@ -357,7 +360,7 @@ function HomeScreen({ navigation }) {
       setTimeout(() => {
         setFormSubmitLoader(false);
         navigation.navigate("RouteSearchDetails", {
-          trips: result,
+          trips: rearranged,
         });
       }, 500);
     }, 500);

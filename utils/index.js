@@ -58,3 +58,12 @@ export const _cacheImages = (images, cb) => {
     }
   });
 };
+
+export const computeTimeTo12Format = (time) => {
+  const splittedTime = time.split(":");
+  const AmOrPm = splittedTime[0] >= 12 ? "PM" : "AM";
+  const hours = splittedTime[0] % 12 || 12;
+  const finalTime = hours + ":" + splittedTime[1] + " " + AmOrPm;
+
+  return finalTime;
+};

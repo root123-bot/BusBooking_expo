@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity, Pressable } from "react-native";
 import { TextInput } from "react-native-paper";
 import { COLORS } from "../constants/colors";
 import { useNavigation } from "@react-navigation/native";
+import { computeTimeTo12Format } from "../utils";
 
 function RouteCard({ metadata }) {
   const navigation = useNavigation();
@@ -47,19 +48,12 @@ function RouteCard({ metadata }) {
             style={{
               fontSize: 14,
               fontFamily: "overpass-reg",
+              textTransform: "capitalize",
             }}
           >
             {metadata.bus_info.bus_name}
           </Text>
-          {/* <Text
-            style={{
-              fontSize: 14,
-              fontFamily: "overpass-reg",
-              color: COLORS.darkprimary,
-            }}
-          >
-            09:30 PM
-          </Text> */}
+
           <View
             style={{
               flexDirection: "row",
@@ -73,7 +67,7 @@ function RouteCard({ metadata }) {
                 color: COLORS.darkprimary,
               }}
             >
-              $20
+              ${metadata.bus_fare}
             </Text>
             <Text
               style={{
@@ -90,7 +84,6 @@ function RouteCard({ metadata }) {
           style={{
             marginTop: 10,
             flexDirection: "row",
-            // justifyContent: "space-between",
             alignItems: "center",
           }}
         >
@@ -103,10 +96,11 @@ function RouteCard({ metadata }) {
               style={{
                 fontFamily: "montserrat-17",
                 fontSize: 17,
+                textTransform: "capitalize",
               }}
               numberOfLines={1}
             >
-              Dar es salaam
+              {metadata.bus_source}
             </Text>
           </View>
 
@@ -127,10 +121,11 @@ function RouteCard({ metadata }) {
                 fontFamily: "montserrat-17",
                 fontSize: 17,
                 textAlign: "right",
+                textTransform: "capitalize",
               }}
               numberOfLines={1}
             >
-              Mombasa
+              {metadata.bus_destination}
             </Text>
           </View>
         </View>
@@ -147,7 +142,7 @@ function RouteCard({ metadata }) {
             // disabled={true}
             editable={false}
             left={<TextInput.Icon icon="clock-fast" />}
-            value={"08:30 PM"}
+            value={computeTimeTo12Format(metadata.source_arrival_time)}
             style={{
               width: "48%",
             }}
@@ -158,7 +153,7 @@ function RouteCard({ metadata }) {
             editable={false}
             left={<TextInput.Icon icon="clock-fast" />}
             onChangeText={(text) => setPassengers(text)}
-            value={"09:30 PM"}
+            value={computeTimeTo12Format(metadata.bus_departure_time)}
             label={"Departure Time"}
             style={{
               width: "48%",
