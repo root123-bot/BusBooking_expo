@@ -1,11 +1,13 @@
-import React, { memo } from "react";
+import React, { memo, useContext } from "react";
 import { View, Text, Image, TouchableOpacity, Pressable } from "react-native";
 import { TextInput } from "react-native-paper";
 import { COLORS } from "../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 import { computeTimeTo12Format } from "../utils";
+import { AppContext } from "../store/context";
 
 function RouteCard({ metadata }) {
+  const AppCtx = useContext(AppContext);
   const navigation = useNavigation();
   return (
     <Pressable
@@ -16,11 +18,14 @@ function RouteCard({ metadata }) {
         marginTop: "2%",
         marginBottom: "5%",
       }}
-      onPress={() =>
+      onPress={() => {
+        // lets also save the metadata chosen by user
+        AppCtx.manipulatePickSeatScreenMetadata({ metadata });
+
         navigation.navigate("BusDetailsScreen", {
           metadata,
-        })
-      }
+        });
+      }}
     >
       <View
         style={{

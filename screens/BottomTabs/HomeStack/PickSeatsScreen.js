@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import { COLORS } from "../../../constants/colors";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
@@ -22,7 +23,41 @@ function PickSeatsScreen({ route, navigation }) {
   const { metadata } = route.params;
   const AppCtx = useContext(AppContext);
 
+  // this make sense so as if user is not login to forward this metadata back
+  // to this screen
+  // AppCtx.manipulatePickSeatScreenMetadata({ metadata });
+
   const [bookedSeat, setBookedSeat] = useState([]);
+
+  const bookSeatsHandler = () => {
+    if (!AppCtx.isAunthenticated) {
+      return Alert.alert(
+        "Login Required!",
+        "This action need you to have account, register or login here",
+        [
+          {
+            text: "Cancel",
+            onPress: () => {
+              console.log("Hello world");
+            },
+          },
+          {
+            text: "Proceed",
+            style: "destructive",
+            onPress: () => {
+              navigation.navigate("ProfileStack", {
+                screen: "Login",
+                params: {
+                  next: "chooseseats",
+                },
+              });
+            },
+          },
+        ]
+      );
+    }
+    navigation.navigate("FillPassengerInfo");
+  };
   return (
     <>
       <StatusBar style="light" />
@@ -384,7 +419,7 @@ function PickSeatsScreen({ route, navigation }) {
                         color: COLORS.lightGrey,
                       }}
                     >
-                      Chosen (0)
+                      Chosen ({bookedSeat.length})
                     </RNPaper.Text>
                   </View>
                   <View
@@ -431,6 +466,9 @@ function PickSeatsScreen({ route, navigation }) {
                   getBookedSeats={(seats) => {
                     console.log("getBookedSeats :: ", seats);
                     setBookedSeat(seats);
+                    AppCtx.manipulatePickSeatScreenMetadata({
+                      pickedSeats: seats,
+                    });
                   }}
                 />
               </View>
@@ -503,7 +541,7 @@ function PickSeatsScreen({ route, navigation }) {
               labelStyle={{
                 fontWeight: "bold",
               }}
-              onPress={() => navigation.navigate("FillPassengerInfo")}
+              onPress={bookSeatsHandler}
             >
               Next
             </RNPaper.Button>

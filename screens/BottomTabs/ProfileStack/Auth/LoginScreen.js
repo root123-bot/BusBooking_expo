@@ -87,6 +87,14 @@ function LoginScreen({ route, navigation }) {
               navigation.navigate("ProfileScreen");
             } else if (next === "Home") {
               navigation.navigate("HomeScreen");
+            } else if (next === "chooseseats") {
+              navigation.navigate("HomeStack", {
+                screen: "PickSeatScreen",
+                params: {
+                  metadata: AppCtx.pickSeatScreenMetadata.metadata,
+                  pickedSeats: AppCtx.pickSeatScreenMetadata.pickedSeats,
+                },
+              });
             }
           }, 1000);
         } else {

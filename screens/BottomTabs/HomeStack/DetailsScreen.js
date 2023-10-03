@@ -90,7 +90,8 @@ function DetailsScreen({ navigation }) {
                         }}
                         numberOfLines={1}
                       >
-                        {AppCtx.userTripMetadata.from}
+                        {AppCtx.userTripMetadata &&
+                          AppCtx.userTripMetadata.from}
                       </Text>
                     </View>
                     <View

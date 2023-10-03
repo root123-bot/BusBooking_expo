@@ -20,6 +20,7 @@ export const AppContext = createContext({
   stillFetchingTrips: true,
   stillFetchingAvatars: true,
   userTripMetadata: null,
+  pickSeatScreenMetadata: {},
   manipulateIsAunthenticated: (value) => {},
   manipulateUserMetadata: (metadata) => {},
   manipulateFavIcon: (icon) => {},
@@ -36,6 +37,7 @@ export const AppContext = createContext({
   manipulateStillFetchingTrips: (status) => {},
   manipulateStillFetchingAvatars: (status) => {},
   updateUserTripMetadata: (metadata) => {},
+  manipulatePickSeatScreenMetadata: (metadata) => {},
 });
 
 function AppContextProvider({ children }) {
@@ -48,6 +50,7 @@ function AppContextProvider({ children }) {
   const [alreadyValidated, setAlreadyValidated] = useState(false);
   const [resetPhoneNumber, setResetPhoneNumber] = useState({});
   const [avatars, setAvatars] = useState([]);
+  const [pickSeatScreenMetadata, setPickSeatScreenMetadata] = useState({});
   const [finishedCachingAvatars, setFinishedCachingAvatars] = useState(false);
   const [stillExecutingUserMetadata, setStillExecutingUserMetadata] =
     useState(true);
@@ -73,6 +76,12 @@ function AppContextProvider({ children }) {
 
   function manipulateStillFetchingTrips(status) {
     setStillFetchingTrips(status);
+  }
+
+  function manipulatePickSeatScreenMetadata(metadata) {
+    setPickSeatScreenMetadata((prevState) => {
+      return { ...prevState, metadata };
+    });
   }
 
   function manipulateStillFetchingAvatars(status) {
@@ -127,6 +136,7 @@ function AppContextProvider({ children }) {
     setIsAunthenticated(false);
     setUserMetadata({});
     setStillExecutingUserMetadata(true);
+    setPickSeatScreenMetadata({});
     setResetPhoneNumber({});
     setUserTripMetadata(null);
     AsyncStorage.removeItem("user_id");
@@ -283,6 +293,7 @@ function AppContextProvider({ children }) {
     stillFetchingTrips,
     stillFetchingAvatars,
     userTripMetadata,
+    pickSeatScreenMetadata,
     manipulateIsAunthenticated,
     manipulateUserMetadata,
     manipulateFavIcon,
@@ -299,6 +310,7 @@ function AppContextProvider({ children }) {
     manipulateStillFetchingTrips,
     manipulateStillFetchingAvatars,
     updateUserTripMetadata,
+    manipulatePickSeatScreenMetadata,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
