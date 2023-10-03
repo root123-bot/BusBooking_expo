@@ -420,7 +420,7 @@ function PickSeatsScreen({ route, navigation }) {
                 }}
               >
                 <SeatsLayout
-                  maxSeatToSelect={3}
+                  // maxSeatToSelect={3}
                   row={10}
                   layout={{ columnOne: 1, columnTwo: 2 }}
                   selectedSeats={[
