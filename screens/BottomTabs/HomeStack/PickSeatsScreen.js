@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { memo } from "react";
+import React, { memo, useContext, useState } from "react";
 import {
   Text,
   View,
@@ -14,10 +14,15 @@ import * as RNPaper from "react-native-paper";
 import { HelperText } from "react-native-paper";
 import { CustomLine } from "../../../components/ui";
 import SeatsLayout from "@mindinventory/react-native-bus-seat-layout";
+import { AppContext } from "../../../store/context";
+import { computeTimeTo12Format } from "../../../utils";
+import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 
 function PickSeatsScreen({ route, navigation }) {
-  //   const { metadata } = route.params;
+  const { metadata } = route.params;
+  const AppCtx = useContext(AppContext);
 
+  const [bookedSeat, setBookedSeat] = useState([]);
   return (
     <>
       <StatusBar style="light" />
@@ -53,7 +58,11 @@ function PickSeatsScreen({ route, navigation }) {
                   }}
                 >
                   <TouchableOpacity
-                    onPress={() => navigation.navigate("RouteSearchDetails")}
+                    onPress={() =>
+                      navigation.navigate("BusDetailsScreen", {
+                        metadata,
+                      })
+                    }
                   >
                     <Ionicons name="arrow-back" size={24} color="white" />
                   </TouchableOpacity>
@@ -82,10 +91,11 @@ function PickSeatsScreen({ route, navigation }) {
                           fontWeight: "bold",
                           fontFamily: "overpass-reg",
                           marginTop: 5,
+                          textTransform: "capitalize",
                         }}
                         numberOfLines={1}
                       >
-                        Dar es salaam
+                        {AppCtx.userTripMetadata.from}
                       </Text>
                     </View>
                     <View
@@ -114,10 +124,11 @@ function PickSeatsScreen({ route, navigation }) {
                             fontWeight: "bold",
                             fontFamily: "overpass-reg",
                             marginTop: 5,
+                            textTransform: "capitalize",
                           }}
                           numberOfLines={1}
                         >
-                          Mombasa
+                          {AppCtx.userTripMetadata.destination}
                         </Text>
                       </View>
                     </View>
@@ -134,7 +145,7 @@ function PickSeatsScreen({ route, navigation }) {
                         fontSize: 12,
                         fontFamily: "overpass-reg",
                       }}
-                    >{`${new Date().toDateString()}`}</Text>
+                    >{`${AppCtx.userTripMetadata.departureDate.toDateString()}`}</Text>
                   </View>
                 </View>
                 <View
@@ -186,9 +197,10 @@ function PickSeatsScreen({ route, navigation }) {
                   marginBottom: 0,
                   fontWeight: "bold",
                   color: COLORS.lightGrey,
+                  textTransform: "capitalize",
                 }}
               >
-                BUS #092
+                {metadata.bus_info.bus_name}
               </RNPaper.Text>
               <HelperText
                 padding="none"
@@ -200,7 +212,9 @@ function PickSeatsScreen({ route, navigation }) {
                 }}
               >
                 Plate:{" "}
-                <Text style={{ fontFamily: "overpass-reg" }}>T123ABC</Text>
+                <Text style={{ fontFamily: "overpass-reg" }}>
+                  {metadata.bus_info.plate_number}
+                </Text>
               </HelperText>
             </View>
             <View>
@@ -210,7 +224,7 @@ function PickSeatsScreen({ route, navigation }) {
                   color: COLORS.darkprimary,
                 }}
               >
-                9:30 AM
+                {computeTimeTo12Format(metadata.bus_departure_time)}
               </RNPaper.Text>
             </View>
           </View>
@@ -290,7 +304,7 @@ function PickSeatsScreen({ route, navigation }) {
                         color: COLORS.darkprimary,
                       }}
                     >
-                      $20
+                      ${metadata.bus_fare}
                     </Text>
                     <Text
                       style={{
@@ -406,6 +420,7 @@ function PickSeatsScreen({ route, navigation }) {
                 }}
               >
                 <SeatsLayout
+                  maxSeatToSelect={3}
                   row={10}
                   layout={{ columnOne: 1, columnTwo: 2 }}
                   selectedSeats={[
@@ -415,16 +430,21 @@ function PickSeatsScreen({ route, navigation }) {
                   numberTextStyle={{ fontSize: 12 }}
                   getBookedSeats={(seats) => {
                     console.log("getBookedSeats :: ", seats);
+                    setBookedSeat(seats);
                   }}
                 />
               </View>
             </View>
           </View>
         </ScrollView>
-        <View
+
+        <Animated.View
+          exiting={FadeInDown}
+          entering={FadeInUp}
           style={{
             width: "100%",
             position: "absolute",
+            display: bookedSeat.length > 0 ? "flex" : "none",
             bottom: 0,
             left: 0,
             backgroundColor: "#E5E5E5",
@@ -460,7 +480,7 @@ function PickSeatsScreen({ route, navigation }) {
                     color: COLORS.darkprimary,
                   }}
                 >
-                  $250
+                  ${`${+metadata.bus_fare * bookedSeat.length}`}
                 </Text>
                 {/* <Text
                   style={{
@@ -488,7 +508,7 @@ function PickSeatsScreen({ route, navigation }) {
               Next
             </RNPaper.Button>
           </View>
-        </View>
+        </Animated.View>
       </View>
     </>
   );

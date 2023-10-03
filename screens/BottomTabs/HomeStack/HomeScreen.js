@@ -276,10 +276,10 @@ function HomeScreen({ navigation }) {
 
   const searchTripHandler = () => {
     // make sure passenger is not more than 3
-    if (+passengers > 3) {
-      alert("Passengers should not be more than 3");
-      return;
-    }
+    // if (+passengers > 3) {
+    //   alert("Passengers should not be more than 3");
+    //   return;
+    // }
 
     setFormSubmitLoader(true);
     setShowAnimation(true);
@@ -326,8 +326,8 @@ function HomeScreen({ navigation }) {
   bus then it will be of different time then no need to have logic to remove duplicates, THANK YOU GOD! 
 */
     console.log("RESULTS ", result);
-    console.log("ACTUAL DATA ", result[0].bus_info.bookings_metadata);
-    console.log("SECOND ONE ", result[1].bus_info.bookings_metadata);
+    // console.log("ACTUAL DATA ", result[0].bus_info.bookings_metadata);
+    // console.log("SECOND ONE ", result[1].bus_info.bookings_metadata);
 
     if (result.length === 0) {
       setIcon("error-outline");
@@ -703,7 +703,7 @@ function HomeScreen({ navigation }) {
                     label={"Passengers"}
                     activeOutlineColor="black"
                   />
-                  <RNPaper.HelperText
+                  {/* <RNPaper.HelperText
                     padding="none"
                     style={{
                       fontWeight: "bold",
@@ -712,7 +712,7 @@ function HomeScreen({ navigation }) {
                     }}
                   >
                     ** Enter maximum 3 passengers
-                  </RNPaper.HelperText>
+                  </RNPaper.HelperText> */}
                 </View>
               </View>
               <View

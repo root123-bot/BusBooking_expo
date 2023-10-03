@@ -16,11 +16,18 @@ import RouteCard from "../../../components/RouteCard";
 import * as RNPaper from "react-native-paper";
 import { CustomLine } from "../../../components/ui";
 import { AppContext } from "../../../store/context";
-import { computeTimeTo12Format } from "../../../utils";
+import {
+  computeDifferenceBetweenTimes,
+  computeTimeTo12Format,
+} from "../../../utils";
 function BusDetailsScreen({ navigation, route }) {
   const AppCtx = useContext(AppContext);
 
   const { metadata } = route.params;
+  const timeDifference = computeDifferenceBetweenTimes(
+    computeTimeTo12Format(metadata.bus_departure_time),
+    computeTimeTo12Format(metadata.destination_arrival_time)
+  );
 
   console.log("Metadata: ", metadata);
   return (
@@ -364,7 +371,7 @@ function BusDetailsScreen({ navigation, route }) {
                       fontWeight: "bold",
                     }}
                   >
-                    1h 30m
+                    {timeDifference}
                   </RNPaper.Text>
                 </View>
                 <View>
@@ -521,7 +528,35 @@ function BusDetailsScreen({ navigation, route }) {
               />
             </View>
             <View>
-              <View
+              {metadata.bus_info.bus_lugagge.map((lugagge, index) => (
+                <View
+                  key={index}
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    marginTop: 12,
+                    alignItems: "center",
+                  }}
+                >
+                  <RNPaper.Text
+                    style={{
+                      fontWeight: "bold",
+                      color: COLORS.lightGrey,
+                    }}
+                  >
+                    {`${lugagge.weight} baggage`}
+                  </RNPaper.Text>
+                  <RNPaper.Text
+                    style={{
+                      color: "grey",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {lugagge.price}
+                  </RNPaper.Text>
+                </View>
+              ))}
+              {/* <View
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
@@ -645,7 +680,7 @@ function BusDetailsScreen({ navigation, route }) {
                 >
                   $45
                 </RNPaper.Text>
-              </View>
+              </View> */}
             </View>
           </View>
         </ScrollView>
@@ -708,7 +743,11 @@ function BusDetailsScreen({ navigation, route }) {
                 backgroundColor: COLORS.darkprimary,
                 borderRadius: 20,
               }}
-              onPress={() => navigation.navigate("PickSeatsScreen")}
+              onPress={() =>
+                navigation.navigate("PickSeatsScreen", {
+                  metadata,
+                })
+              }
             >
               Choose
             </Button>

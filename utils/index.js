@@ -3,6 +3,7 @@ import { CacheManager } from "react-native-expo-image-cache";
 import { BASE_URL } from "../constants/domain";
 import { useContext } from "react";
 import * as FileSystem from "expo-file-system";
+import moment from "moment";
 
 export const _cacheResourcesAsync = async () => {
   const images = [
@@ -66,4 +67,20 @@ export const computeTimeTo12Format = (time) => {
   const finalTime = hours + ":" + splittedTime[1] + " " + AmOrPm;
 
   return finalTime;
+};
+
+export const computeDifferenceBetweenTimes = (start, end) => {
+  // i expect this time format "12:18 am"
+  var startTime = moment(start, "HH:mm a");
+  var endTime = moment(end, "HH:mm a");
+
+  var duration = moment.duration(endTime.diff(startTime));
+
+  // duration in hours
+  var hours = parseInt(duration.asHours());
+
+  // duration in minutes
+  var minutes = parseInt(duration.asMinutes()) % 60;
+
+  return `${hours}h ${minutes}m`;
 };
