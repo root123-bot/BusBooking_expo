@@ -18,7 +18,7 @@ function RouteCard({ metadata }) {
       }}
       onPress={() =>
         navigation.navigate("BusDetailsScreen", {
-          bus: "bus",
+          metadata,
         })
       }
     >

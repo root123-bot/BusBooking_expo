@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useContext } from "react";
 import { View, StyleSheet, Text, Image, ScrollView } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { COLORS } from "../../../constants/colors";
@@ -15,9 +15,14 @@ import { Button, HelperText, TextInput } from "react-native-paper";
 import RouteCard from "../../../components/RouteCard";
 import * as RNPaper from "react-native-paper";
 import { CustomLine } from "../../../components/ui";
+import { AppContext } from "../../../store/context";
+import { computeTimeTo12Format } from "../../../utils";
 function BusDetailsScreen({ navigation, route }) {
-  const { bus } = route.params;
-  console.log("Bus: ", bus);
+  const AppCtx = useContext(AppContext);
+
+  const { metadata } = route.params;
+
+  console.log("Metadata: ", metadata);
   return (
     <>
       <StatusBar style="light" />
@@ -87,10 +92,11 @@ function BusDetailsScreen({ navigation, route }) {
                           fontWeight: "bold",
                           fontFamily: "overpass-reg",
                           marginTop: 5,
+                          textTransform: "capitalize",
                         }}
                         numberOfLines={1}
                       >
-                        Dar es salaam
+                        {AppCtx.userTripMetadata.from}
                       </Text>
                     </View>
                     <View
@@ -119,10 +125,11 @@ function BusDetailsScreen({ navigation, route }) {
                             fontWeight: "bold",
                             fontFamily: "overpass-reg",
                             marginTop: 5,
+                            textTransform: "capitalize",
                           }}
                           numberOfLines={1}
                         >
-                          Mombasa
+                          {AppCtx.userTripMetadata.destination}
                         </Text>
                       </View>
                     </View>
@@ -139,7 +146,7 @@ function BusDetailsScreen({ navigation, route }) {
                         fontSize: 12,
                         fontFamily: "overpass-reg",
                       }}
-                    >{`${new Date().toDateString()}`}</Text>
+                    >{`${AppCtx.userTripMetadata.departureDate.toDateString()}`}</Text>
                   </View>
                 </View>
                 <View
@@ -191,9 +198,10 @@ function BusDetailsScreen({ navigation, route }) {
                   marginBottom: 0,
                   fontWeight: "bold",
                   color: COLORS.lightGrey,
+                  textTransform: "capitalize",
                 }}
               >
-                BUS #092
+                {metadata.bus_info.bus_name}
               </RNPaper.Text>
               <HelperText
                 padding="none"
@@ -205,7 +213,9 @@ function BusDetailsScreen({ navigation, route }) {
                 }}
               >
                 Plate:{" "}
-                <Text style={{ fontFamily: "overpass-reg" }}>T123ABC</Text>
+                <Text style={{ fontFamily: "overpass-reg" }}>
+                  {metadata.bus_info.plate_number}
+                </Text>
               </HelperText>
             </View>
             <View>
@@ -215,7 +225,7 @@ function BusDetailsScreen({ navigation, route }) {
                   color: COLORS.darkprimary,
                 }}
               >
-                9:30 AM
+                {computeTimeTo12Format(metadata.bus_departure_time)}
               </RNPaper.Text>
             </View>
           </View>
@@ -323,7 +333,7 @@ function BusDetailsScreen({ navigation, route }) {
                       color: COLORS.primary,
                     }}
                   >
-                    9:30 AM
+                    {computeTimeTo12Format(metadata.bus_departure_time)}
                   </RNPaper.Text>
                   <RNPaper.HelperText
                     padding="none"
@@ -332,9 +342,10 @@ function BusDetailsScreen({ navigation, route }) {
                       paddingTop: 0,
                       marginBottom: 0,
                       paddingBottom: 0,
+                      fontSize: 11,
                     }}
                   >
-                    July, 17 2022
+                    {`${AppCtx.userTripMetadata.departureDate.toDateString()}`}
                   </RNPaper.HelperText>
                 </View>
                 <View
@@ -364,7 +375,7 @@ function BusDetailsScreen({ navigation, route }) {
                       color: COLORS.primary,
                     }}
                   >
-                    5:00 AM
+                    {computeTimeTo12Format(metadata.destination_arrival_time)}
                   </RNPaper.Text>
                   <RNPaper.HelperText
                     padding="none"
@@ -373,9 +384,10 @@ function BusDetailsScreen({ navigation, route }) {
                       paddingTop: 0,
                       marginBottom: 0,
                       paddingBottom: 0,
+                      fontSize: 11,
                     }}
                   >
-                    July, 17 2022
+                    {`${AppCtx.userTripMetadata.departureDate.toDateString()}`}
                   </RNPaper.HelperText>
                 </View>
               </View>
@@ -394,10 +406,12 @@ function BusDetailsScreen({ navigation, route }) {
                       fontWeight: "bold",
                       fontSize: 20,
                       color: "#495057",
+                      textAlign: "center",
+                      textTransform: "capitalize",
                     }}
                     numberOfLines={1}
                   >
-                    Dar es salaam
+                    {AppCtx.userTripMetadata.from}
                   </RNPaper.Text>
                   <RNPaper.HelperText
                     numberOfLines={1}
@@ -407,9 +421,12 @@ function BusDetailsScreen({ navigation, route }) {
                       paddingTop: 0,
                       marginBottom: 0,
                       paddingBottom: 0,
+                      fontSize: 11,
+                      textAlign: "center",
+                      textTransform: "capitalize",
                     }}
                   >
-                    Ubungo Bus Terminal
+                    {metadata.departure_station}
                   </RNPaper.HelperText>
                 </View>
                 <View
@@ -427,9 +444,11 @@ function BusDetailsScreen({ navigation, route }) {
                       fontWeight: "bold",
                       fontSize: 20,
                       color: "#495057",
+                      textAlign: "center",
+                      textTransform: "capitalize",
                     }}
                   >
-                    Mombasa
+                    {AppCtx.userTripMetadata.destination}
                   </RNPaper.Text>
                   <RNPaper.HelperText
                     numberOfLines={1}
@@ -439,9 +458,12 @@ function BusDetailsScreen({ navigation, route }) {
                       paddingTop: 0,
                       marginBottom: 0,
                       paddingBottom: 0,
+                      fontSize: 11,
+                      textAlign: "center",
+                      textTransform: "capitalize",
                     }}
                   >
-                    Azikiwe Station
+                    {metadata.destination_station}
                   </RNPaper.HelperText>
                 </View>
               </View>
@@ -666,7 +688,7 @@ function BusDetailsScreen({ navigation, route }) {
                     color: COLORS.darkprimary,
                   }}
                 >
-                  $20
+                  ${metadata.bus_fare}
                 </Text>
                 <Text
                   style={{
