@@ -94,7 +94,22 @@ function SetPinScreen({ navigation, route }) {
 
             AsyncStorage.setItem("phone_number", phone);
             AppCtx.manipulateIsAunthenticated(true);
-            navigation.navigate("ProfileScreen");
+            if (
+              AppCtx.afterLoginNext &&
+              AppCtx.afterLoginNext === "chooseseats"
+            ) {
+              // lets first clear it and then navigate
+              AppCtx.manipulateAfterLoginNext();
+              navigation.navigate("HomeStack", {
+                screen: "PickSeatScreen",
+                params: {
+                  metadata: AppCtx.pickSeatScreenMetadata.metadata,
+                  pickedSeats: AppCtx.pickSeatScreenMetadata.pickedSeats,
+                },
+              });
+            } else {
+              navigation.navigate("ProfileScreen");
+            }
           }, 1000);
           setShowAnimation(false);
         }

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import {
   View,
   Text,
@@ -14,6 +14,19 @@ import { HelperText, Button } from "react-native-paper";
 import * as RNPaper from "react-native-paper";
 import { CustomLine } from "../../../components/ui";
 function FillPassengerInfo({ route, navigation }) {
+  const { metadata } = route.params;
+  const [name, setName] = useState({
+    value: "",
+    isValid: true,
+  });
+  const [firstPhone, setFirstPhone] = useState({
+    value: "",
+    isValid: true,
+  });
+  const [secondPhone, setSecondPhone] = useState({
+    value: "",
+    isValid: true,
+  });
   return (
     <>
       <StatusBar style="light" />
@@ -50,7 +63,11 @@ function FillPassengerInfo({ route, navigation }) {
                     }}
                   >
                     <TouchableOpacity
-                      onPress={() => navigation.navigate("PickSeatsScreen")}
+                      onPress={() =>
+                        navigation.navigate("PickSeatsScreen", {
+                          metadata,
+                        })
+                      }
                     >
                       <Ionicons name="arrow-back" size={24} color="white" />
                     </TouchableOpacity>
@@ -333,24 +350,25 @@ function FillPassengerInfo({ route, navigation }) {
                     textAlign: "center",
                   }}
                 >
-                  Provide Passenger(s) Info
+                  Fill Booking Information
                 </RNPaper.Text>
+                <RNPaper.HelperText
+                  padding="none"
+                  style={{
+                    textAlign: "center",
+                  }}
+                >
+                  The information to track and validate ticket(s).
+                </RNPaper.HelperText>
               </View>
               <CustomLine />
               <View
-                style={{
-                  marginVertical: 10,
-                }}
+                style={
+                  {
+                    // marginVertical: 10,
+                  }
+                }
               >
-                <RNPaper.Text
-                  style={{
-                    fontWeight: "bold",
-                    color: COLORS.lightGrey,
-                  }}
-                >
-                  ● Seat Label 1
-                </RNPaper.Text>
-
                 <View>
                   <RNPaper.TextInput
                     mode="outlined"
@@ -358,96 +376,44 @@ function FillPassengerInfo({ route, navigation }) {
                     style={{
                       backgroundColor: "white",
                       marginVertical: 10,
+                      marginTop: 0,
                     }}
-                    activeOutlineColor={COLORS.lightGrey}
-                    outlineColor={COLORS.lightGrey}
+                    value={name.value}
+                    activeOutlineColor={name.isValid ? COLORS.lightGrey : "red"}
+                    outlineColor={name.isValid ? COLORS.lightGrey : "red"}
                   />
                   <RNPaper.TextInput
                     mode="outlined"
-                    label="Phone number"
+                    label="1st Phone number"
                     style={{
                       backgroundColor: "white",
                       marginVertical: 10,
                     }}
-                    activeOutlineColor={COLORS.lightGrey}
-                    outlineColor={COLORS.lightGrey}
+                    activeOutlineColor={
+                      firstPhone.isValid ? COLORS.lightGrey : "red"
+                    }
+                    outlineColor={firstPhone.isValid ? COLORS.lightGrey : "red"}
                   />
-                </View>
-              </View>
-              <CustomLine />
-              <View
-                style={{
-                  marginVertical: 10,
-                }}
-              >
-                <RNPaper.Text
-                  style={{
-                    fontWeight: "bold",
-                    color: COLORS.lightGrey,
-                  }}
-                >
-                  ● Seat Label 8
-                </RNPaper.Text>
-
-                <View>
                   <RNPaper.TextInput
                     mode="outlined"
-                    label="Full name"
+                    label="2st Phone number"
                     style={{
                       backgroundColor: "white",
-                      marginVertical: 10,
+                      marginTop: 10,
                     }}
                     activeOutlineColor={COLORS.lightGrey}
                     outlineColor={COLORS.lightGrey}
                   />
-                  <RNPaper.TextInput
-                    mode="outlined"
-                    label="Phone number"
+                  <RNPaper.HelperText
                     style={{
-                      backgroundColor: "white",
-                      marginVertical: 10,
+                      marginTop: 2,
+                      paddingTop: 0,
+                      fontWeight: "bold",
+                      color: COLORS.secondary,
                     }}
-                    activeOutlineColor={COLORS.lightGrey}
-                    outlineColor={COLORS.lightGrey}
-                  />
-                </View>
-              </View>
-              <CustomLine />
-              <View
-                style={{
-                  marginVertical: 10,
-                }}
-              >
-                <RNPaper.Text
-                  style={{
-                    fontWeight: "bold",
-                    color: COLORS.lightGrey,
-                  }}
-                >
-                  ● Seat Label 10
-                </RNPaper.Text>
-
-                <View>
-                  <RNPaper.TextInput
-                    mode="outlined"
-                    label="Full name"
-                    style={{
-                      backgroundColor: "white",
-                      marginVertical: 10,
-                    }}
-                    activeOutlineColor={COLORS.lightGrey}
-                    outlineColor={COLORS.lightGrey}
-                  />
-                  <RNPaper.TextInput
-                    mode="outlined"
-                    label="Phone number"
-                    style={{
-                      backgroundColor: "white",
-                      marginVertical: 10,
-                    }}
-                    activeOutlineColor={COLORS.lightGrey}
-                    outlineColor={COLORS.lightGrey}
-                  />
+                  >
+                    ** optional
+                  </RNPaper.HelperText>
                 </View>
               </View>
             </View>

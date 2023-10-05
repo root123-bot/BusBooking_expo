@@ -31,6 +31,7 @@ function PickSeatsScreen({ route, navigation }) {
 
   const bookSeatsHandler = () => {
     if (!AppCtx.isAunthenticated) {
+      AppCtx.manipulateAfterLoginNext("chooseseats");
       return Alert.alert(
         "Login Required!",
         "This action need you to have account, register or login here",
@@ -56,7 +57,9 @@ function PickSeatsScreen({ route, navigation }) {
         ]
       );
     }
-    navigation.navigate("FillPassengerInfo");
+    navigation.navigate("FillPassengerInfo", {
+      metadata,
+    });
   };
   return (
     <>

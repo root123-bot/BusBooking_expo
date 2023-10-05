@@ -21,6 +21,7 @@ export const AppContext = createContext({
   stillFetchingAvatars: true,
   userTripMetadata: null,
   pickSeatScreenMetadata: {},
+  afterLoginNext: null,
   manipulateIsAunthenticated: (value) => {},
   manipulateUserMetadata: (metadata) => {},
   manipulateFavIcon: (icon) => {},
@@ -38,6 +39,7 @@ export const AppContext = createContext({
   manipulateStillFetchingAvatars: (status) => {},
   updateUserTripMetadata: (metadata) => {},
   manipulatePickSeatScreenMetadata: (metadata) => {},
+  manipulateAfterLoginNext: (next) => {},
 });
 
 function AppContextProvider({ children }) {
@@ -55,6 +57,7 @@ function AppContextProvider({ children }) {
   const [stillExecutingUserMetadata, setStillExecutingUserMetadata] =
     useState(true);
   const [trips, setTrips] = useState([]);
+  const [afterLoginNext, setAfterLoginNext] = useState(null);
   const [userTripMetadata, setUserTripMetadata] = useState(null);
   const [stillFetchingTrips, setStillFetchingTrips] = useState(true);
   const [stillFetchingAvatars, setStillFetchingAvatars] = useState(true);
@@ -68,6 +71,10 @@ function AppContextProvider({ children }) {
 
   function manipulateLastLoginPhoneNumber(phone_number) {
     setLastLoginPhoneNumber(phone_number);
+  }
+
+  function manipulateAfterLoginNext(next) {
+    setAfterLoginNext(next);
   }
 
   function updateTrips(trips) {
@@ -139,6 +146,7 @@ function AppContextProvider({ children }) {
     setPickSeatScreenMetadata({});
     setResetPhoneNumber({});
     setUserTripMetadata(null);
+    setAfterLoginNext(null);
     AsyncStorage.removeItem("user_id");
   }
 
@@ -294,6 +302,7 @@ function AppContextProvider({ children }) {
     stillFetchingAvatars,
     userTripMetadata,
     pickSeatScreenMetadata,
+    afterLoginNext,
     manipulateIsAunthenticated,
     manipulateUserMetadata,
     manipulateFavIcon,
@@ -311,6 +320,7 @@ function AppContextProvider({ children }) {
     manipulateStillFetchingAvatars,
     updateUserTripMetadata,
     manipulatePickSeatScreenMetadata,
+    manipulateAfterLoginNext,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
