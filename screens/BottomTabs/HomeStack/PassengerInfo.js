@@ -13,6 +13,7 @@ import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { HelperText, Button } from "react-native-paper";
 import * as RNPaper from "react-native-paper";
 import { CustomLine } from "../../../components/ui";
+import PhoneInput from "react-native-phone-number-input";
 function FillPassengerInfo({ route, navigation }) {
   const { metadata } = route.params;
   const [name, setName] = useState({
@@ -27,6 +28,33 @@ function FillPassengerInfo({ route, navigation }) {
     value: "",
     isValid: true,
   });
+  const [formattedValue, setFormattedValue] = useState("+255");
+  const [secondFormattedValue, setSecondFormattedValue] = useState("+255");
+
+  const paymentHandler = () => {
+    const nameValid = name.value.trim().length > 0;
+    const firstPhoneValid =
+      firstPhone.value.trim().length > 9 && !firstPhone.value.startsWith("0");
+
+    const formattedValueValid = formattedValue.length === 13;
+
+    // of course second phone number is 'optional' so even mtu akikosea we don't
+    // care much
+    if (!nameValid || !firstPhoneValid) {
+      setName((prevState) => ({ ...prevState, isValid: nameValid }));
+      setFirstPhone((prevState) => ({
+        ...prevState,
+        isValid: firstPhoneValid,
+      }));
+
+      alert("Incorrect data provided");
+      return;
+    }
+
+    // lets check validity if the seat user has booked are still exist
+    // or its already taken
+  };
+
   return (
     <>
       <StatusBar style="light" />
@@ -298,24 +326,12 @@ function FillPassengerInfo({ route, navigation }) {
                 </View>
               </View>
             </View>
-            {/* <View
-              style={{
-                width: "90%",
-                marginLeft: "auto",
-                marginRight: "auto",
-                paddingTop: 13,
-              }}
-            >
-              <RNPaper.Text
-                style={{
-                  fontWeight: "bold",
-                  fontSize: 20,
-                  color: COLORS.lightGrey,
-                }}
-              >
-                Fill Passenger Info
-              </RNPaper.Text>
-            </View> */}
+            {/* Hii conter-measure tuliyoitumie hapa ni nzuri instead mtu ajaze passenger name and phone for each
+              ticket inakuwa mtihani what if he want to book 10 seats, ko sio poa kwa kweli so hapa information 
+              ninazohitaji ili niweze ku-track ni mtu kutuma jina na namba mbili za simu ya pili ni optional..
+              hii itasaidi afu kwenye ticket what we target haitokuwa na majina ya abiria itakuwa na jina tu 
+              la aliye-book na phone number yake
+            */}
             <View
               style={{
                 borderRadius: 15,
@@ -362,13 +378,7 @@ function FillPassengerInfo({ route, navigation }) {
                 </RNPaper.HelperText>
               </View>
               <CustomLine />
-              <View
-                style={
-                  {
-                    // marginVertical: 10,
-                  }
-                }
-              >
+              <View>
                 <View>
                   <RNPaper.TextInput
                     mode="outlined"
@@ -382,27 +392,53 @@ function FillPassengerInfo({ route, navigation }) {
                     activeOutlineColor={name.isValid ? COLORS.lightGrey : "red"}
                     outlineColor={name.isValid ? COLORS.lightGrey : "red"}
                   />
-                  <RNPaper.TextInput
-                    mode="outlined"
-                    label="1st Phone number"
-                    style={{
-                      backgroundColor: "white",
-                      marginVertical: 10,
+                  <PhoneInput
+                    defaultValue={firstPhone.value}
+                    defaultCode="TZ"
+                    layout="first"
+                    onChangeText={(text) => {
+                      setPhone({ value: text, isValid: true });
                     }}
-                    activeOutlineColor={
-                      firstPhone.isValid ? COLORS.lightGrey : "red"
-                    }
-                    outlineColor={firstPhone.isValid ? COLORS.lightGrey : "red"}
+                    onChangeFormattedText={(text) => {
+                      setFormattedValue(text);
+                    }}
+                    containerStyle={{
+                      width: "100%",
+                      backgroundColor: COLORS.light,
+                      borderColor: firstPhone.isValid ? "grey" : "red",
+                      marginVertical: 10,
+                      borderWidth: 1,
+                    }}
+                    textContainerStyle={{
+                      backgroundColor: COLORS.light,
+                    }}
+                    withDarkTheme={false}
+                    withShadow
+                    autoFocus={false}
                   />
-                  <RNPaper.TextInput
-                    mode="outlined"
-                    label="2st Phone number"
-                    style={{
-                      backgroundColor: "white",
+                  <PhoneInput
+                    defaultValue={secondPhone.value}
+                    defaultCode="TZ"
+                    layout="first"
+                    onChangeText={(text) => {
+                      setPhone({ value: text, isValid: true });
+                    }}
+                    onChangeFormattedText={(text) => {
+                      setSecondFormattedValue(text);
+                    }}
+                    containerStyle={{
+                      width: "100%",
+                      backgroundColor: COLORS.light,
+                      borderColor: "grey",
+                      borderWidth: 1,
                       marginTop: 10,
                     }}
-                    activeOutlineColor={COLORS.lightGrey}
-                    outlineColor={COLORS.lightGrey}
+                    textContainerStyle={{
+                      backgroundColor: COLORS.light,
+                    }}
+                    withDarkTheme={false}
+                    withShadow
+                    autoFocus={false}
                   />
                   <RNPaper.HelperText
                     style={{
@@ -480,7 +516,7 @@ function FillPassengerInfo({ route, navigation }) {
                 labelStyle={{
                   fontWeight: "bold",
                 }}
-                onPress={() => navigation.navigate("FillPassengerInfo")}
+                onPress={paymentHandler}
               >
                 Pay now
               </RNPaper.Button>
