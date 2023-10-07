@@ -1,0 +1,1 @@
+react-native-lottie i changed it from 3.5.0 to latest one of 6
